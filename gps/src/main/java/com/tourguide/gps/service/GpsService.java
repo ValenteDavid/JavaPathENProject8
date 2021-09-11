@@ -1,11 +1,9 @@
 package com.tourguide.gps.service;
 
-import java.util.UUID;
-
-import gpsUtil.location.VisitedLocation;
+import gpsUtil.location.Location;
 
 public interface GpsService {
 
-	VisitedLocation getUserLocation(UUID uuid);
+	Location getUserLocation(String userName);
 
 }
