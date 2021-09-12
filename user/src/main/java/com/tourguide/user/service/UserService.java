@@ -6,4 +6,6 @@ public interface UserService {
 
 	User getUser(String userName);
 
+	User addUser(User user);
+
 }
