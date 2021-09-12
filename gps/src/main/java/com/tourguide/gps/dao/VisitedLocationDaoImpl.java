@@ -17,14 +17,26 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 	@Override
 	public List<VisitedLocation> findByUUID(UUID userId) {
 		return visitedLocations.stream()
-		.filter(visitedLocations -> visitedLocations.userId.equals(userId))
-		.collect(Collectors.toList());
+				.filter(visitedLocations -> visitedLocations.userId.equals(userId))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public VisitedLocation save(VisitedLocation visitedLocation) {
-		 visitedLocations.add(visitedLocation);
-		 return visitedLocation;
+		visitedLocations.add(visitedLocation);
+		return visitedLocation;
 	}
 
+	@Override
+	public VisitedLocation findByUUIDOrderByTimeVisitedDesc(UUID userId) {
+		List<VisitedLocation> visitedLocationByUUID = findByUUID(userId);
+		VisitedLocation visitedLocationLast = visitedLocationByUUID.get(0);
+		
+		for (VisitedLocation visitedLocation : visitedLocationByUUID) {
+			if (visitedLocation.timeVisited.before(visitedLocationLast.timeVisited)) {
+				visitedLocationLast=visitedLocation;
+			}
+		}
+		return visitedLocationLast;
+	}
 }

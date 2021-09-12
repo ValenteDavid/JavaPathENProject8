@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tourguide.gps.beans.VisitedLocationBean;
 import com.tourguide.gps.dao.VisitedLocationDao;
 import com.tourguide.gps.proxies.TourGuideProxy;
 import com.tourguide.gps.proxies.UserProxy;
@@ -26,6 +25,9 @@ public class GpsServiceImpl implements GpsService {
 	private TourGuideProxy tourGuideProxy;
 	@Autowired
 	private UserProxy userProxy;
+	@Autowired
+	private TrackService trackService;
+	
 	
 	@Autowired
 	private VisitedLocationDao visitedLocationDao;
@@ -34,9 +36,9 @@ public class GpsServiceImpl implements GpsService {
 	public Location getUserLocation(String userName) {
 		VisitedLocation visitedLocation;
 		if (getVisitedLocations(userName).size() > 0) {
-			visitedLocation = VisitedLocationBean.convertToModel(tourGuideProxy.getLastVisitedLocation(userName));
+			visitedLocation = getLastVisitedLocation(userName);
 		} else {
-			visitedLocation = VisitedLocationBean.convertToModel(tourGuideProxy.trackUserLocation(userName));
+			visitedLocation = trackService.trackUserLocation(userName);
 		}
 		Location location = visitedLocation.location;
 		logger.info("Location : latitude {} longitude {}",location.latitude,location.longitude);
@@ -54,6 +56,11 @@ public class GpsServiceImpl implements GpsService {
 	@Override
 	public List<VisitedLocation> getVisitedLocations(String userName) {
 		return visitedLocationDao.findByUUID(userProxy.getUserId(userName));
+	}
+	
+	@Override
+	public VisitedLocation getLastVisitedLocation(String userName) {
+		return visitedLocationDao.findByUUIDOrderByTimeVisitedDesc(userProxy.getUserId(userName));
 	}
 	
 }

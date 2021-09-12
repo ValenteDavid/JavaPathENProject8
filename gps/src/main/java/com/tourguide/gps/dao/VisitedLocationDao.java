@@ -11,4 +11,6 @@ public interface VisitedLocationDao {
 
 	VisitedLocation save(VisitedLocation visitedLocation);
 
+	VisitedLocation findByUUIDOrderByTimeVisitedDesc(UUID userId);
+
 }

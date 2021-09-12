@@ -89,11 +89,6 @@ public class TourGuideController {
 		return visitedLocationsDto;
 	}
 
-	@RequestMapping("/getLastVisitedLocation")
-	public VisitedLocationDto getLastVisitedLocation(@RequestParam String userName) {
-		return VisitedLocationDto.convertToDTO(getUser(userName).getLastVisitedLocation());
-	}
-
 	@RequestMapping("/trackUserLocation")
 	public VisitedLocationDto trackUserLocation(@RequestParam String userName) {
 		return VisitedLocationDto.convertToDTO(tourGuideService.trackUserLocation(getUser(userName)));

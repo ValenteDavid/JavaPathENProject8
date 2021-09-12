@@ -15,4 +15,6 @@ public interface GpsService {
 
 	void addVisitedLocation(UUID id, Location location, Date timeVisited);
 
+	VisitedLocation getLastVisitedLocation(String userName);
+
 }
