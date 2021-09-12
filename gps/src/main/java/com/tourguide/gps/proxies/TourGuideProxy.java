@@ -11,8 +11,8 @@ import com.tourguide.gps.beans.VisitedLocationBean;
 
 @FeignClient(name = "TourGuide", url = "localhost:8080")
 public interface TourGuideProxy {
-
-	@RequestMapping("/getUser")
+	
+	@RequestMapping("/getUserId")
 	UUID getUserId(@RequestParam String userName);
 
 	@RequestMapping("/getVisitedLocations")

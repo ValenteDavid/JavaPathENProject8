@@ -5,9 +5,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.jsoniter.output.JsonStream;
 
@@ -17,7 +17,7 @@ import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
 import tripPricer.Provider;
 
-@Controller
+@RestController
 public class TourGuideController {
 
 	@Autowired
@@ -78,7 +78,7 @@ public class TourGuideController {
 		return tourGuideService.getUser(userName);
 	}
 
-	@RequestMapping("/getUser")
+	@RequestMapping("/getUserId")
 	public UUID getUserId(@RequestParam String userName) {
 		return tourGuideService.getUser(userName).getUserId();
 	}
