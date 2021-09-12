@@ -78,11 +78,6 @@ public class TourGuideController {
 		return tourGuideService.getUser(userName);
 	}
 
-	@RequestMapping("/getUserId")
-	public UUID getUserId(@RequestParam String userName) {
-		return tourGuideService.getUser(userName).getUserId();
-	}
-
 	@RequestMapping("/getVisitedLocations")
 	public List<VisitedLocationDto> getVisitedLocations(@RequestParam String userName) {
 		List<VisitedLocation> visitedLocations = getUser(userName).getVisitedLocations();

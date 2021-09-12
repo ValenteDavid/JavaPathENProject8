@@ -1,12 +1,8 @@
 package com.tourguide.gps.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.tourguide.gps.beans.VisitedLocationBean;
 import com.tourguide.gps.dao.VisitedLocationDao;
 import com.tourguide.gps.proxies.TourGuideProxy;
+import com.tourguide.gps.proxies.UserProxy;
 
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
@@ -27,6 +24,8 @@ public class GpsServiceImpl implements GpsService {
 
 	@Autowired
 	private TourGuideProxy tourGuideProxy;
+	@Autowired
+	private UserProxy userProxy;
 	
 	@Autowired
 	private VisitedLocationDao visitedLocationDao;
@@ -44,6 +43,7 @@ public class GpsServiceImpl implements GpsService {
 		return location;
 	}
 	
+	@Override
 	public void addVisitedLocation(UUID id, Location location, Date timeVisited) {
 		visitedLocationDao.save(new VisitedLocation(
 				id,
@@ -53,7 +53,7 @@ public class GpsServiceImpl implements GpsService {
 
 	@Override
 	public List<VisitedLocation> getVisitedLocations(String userName) {
-		return visitedLocationDao.findByUUID(tourGuideProxy.getUserId(userName));
+		return visitedLocationDao.findByUUID(userProxy.getUserId(userName));
 	}
 	
 }
