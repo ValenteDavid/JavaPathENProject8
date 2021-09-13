@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tourguide.gps.controller.dto.AttractionDto;
 import com.tourguide.gps.controller.dto.LocationDto;
 import com.tourguide.gps.controller.dto.VisitedLocationDto;
 import com.tourguide.gps.service.GpsService;
@@ -44,6 +45,16 @@ public class LocationController {
 				.map(visitedLocation -> VisitedLocationDto.convertToDto(visitedLocation))
 				.collect(Collectors.toList());
 		return visitedLocationDtoList;
+	}
+	
+	@RequestMapping("/getAttractions")
+	public List<AttractionDto> getAttractions() {
+		List<AttractionDto> AttractionDTOList =
+				gpsService.getAttractions().stream()
+						.map(attraction -> AttractionDto.convertToDto(attraction))
+						.collect(Collectors.toList());
+
+		return AttractionDTOList;
 	}
 
 }

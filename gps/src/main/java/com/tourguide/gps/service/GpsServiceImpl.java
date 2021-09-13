@@ -13,6 +13,8 @@ import com.tourguide.gps.dao.VisitedLocationDao;
 import com.tourguide.gps.proxies.TourGuideProxy;
 import com.tourguide.gps.proxies.UserProxy;
 
+import gpsUtil.GpsUtil;
+import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
@@ -27,6 +29,8 @@ public class GpsServiceImpl implements GpsService {
 	private UserProxy userProxy;
 	@Autowired
 	private TrackService trackService;
+	@Autowired
+	private GpsUtil gpsUtil;
 	
 	
 	@Autowired
@@ -61,6 +65,11 @@ public class GpsServiceImpl implements GpsService {
 	@Override
 	public VisitedLocation getLastVisitedLocation(String userName) {
 		return visitedLocationDao.findByUUIDOrderByTimeVisitedDesc(userProxy.getUserId(userName));
+	}
+
+	@Override
+	public List<Attraction> getAttractions() {
+		return gpsUtil.getAttractions();
 	}
 	
 }

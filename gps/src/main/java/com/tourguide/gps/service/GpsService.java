@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
@@ -16,5 +17,7 @@ public interface GpsService {
 	void addVisitedLocation(UUID id, Location location, Date timeVisited);
 
 	VisitedLocation getLastVisitedLocation(String userName);
+	
+	List<Attraction> getAttractions();
 
 }
