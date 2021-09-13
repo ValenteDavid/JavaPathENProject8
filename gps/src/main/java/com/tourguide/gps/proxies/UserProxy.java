@@ -6,8 +6,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import gpsUtil.location.VisitedLocation;
-
 @FeignClient(name = "user", url = "localhost:9003")
 public interface UserProxy {
 	

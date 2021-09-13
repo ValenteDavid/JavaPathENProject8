@@ -4,16 +4,17 @@ import gpsUtil.location.Location;
 
 public class LocationDto {
 
-	private double longitude;
 	private double latitude;
+	private double longitude;
 	
 	public LocationDto() {
 		super();
 	}
 
-	public LocationDto(double longitude, double latitude) {
-		this.longitude = longitude;
+	public LocationDto(double latitude, double longitude) {
+		super();
 		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public double getLongitude() {
@@ -33,7 +34,7 @@ public class LocationDto {
 	}
 	
 	public static LocationDto convertToDto (Location location) {
-		return new LocationDto(location.longitude,location.latitude);
+		return new LocationDto(location.latitude,location.longitude);
 	}
 
 	@Override

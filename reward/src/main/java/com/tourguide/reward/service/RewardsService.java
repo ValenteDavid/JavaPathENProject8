@@ -1,6 +1,6 @@
 package com.tourguide.reward.service;
 
-public interface RewardService {
+public interface RewardsService {
 	
 	void calculateRewards(String userName);
 

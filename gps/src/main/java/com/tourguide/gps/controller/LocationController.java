@@ -1,7 +1,9 @@
 package com.tourguide.gps.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tourguide.gps.controller.dto.LocationDto;
+import com.tourguide.gps.controller.dto.VisitedLocationDto;
 import com.tourguide.gps.service.GpsService;
 
 import gpsUtil.location.Location;
 
 @RestController
-public class GpsController {
+public class LocationController {
 
 	@Autowired
 	private GpsService gpsService;
@@ -26,9 +29,21 @@ public class GpsController {
 		locationDto = LocationDto.convertToDto(gpsService.getUserLocation(userName));
 		return locationDto;
 	}
-	
+
 	@RequestMapping("/addVisitedLocation")
-	public void addVisitedLocation(@RequestParam UUID uuid,@RequestParam double latitude,@RequestParam double longitude,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited) {
+	public void addVisitedLocation(@RequestParam UUID uuid, @RequestParam double latitude,
+			@RequestParam double longitude,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited) {
 		gpsService.addVisitedLocation(uuid, new Location(latitude, longitude), timeVisited);
 	}
+
+	@RequestMapping("/getVisitedLocations")
+	public List<VisitedLocationDto> getVisitedLocations(String userName) {
+		List<VisitedLocationDto> visitedLocationDtoList = 
+				gpsService.getVisitedLocations(userName).stream()
+				.map(visitedLocation -> VisitedLocationDto.convertToDto(visitedLocation))
+				.collect(Collectors.toList());
+		return visitedLocationDtoList;
+	}
+
 }

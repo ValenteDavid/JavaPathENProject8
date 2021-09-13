@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tourguide.reward.service.RewardService;
+import com.tourguide.reward.service.RewardsService;
 
 @RestController
 public class RewardController {
 	
 	@Autowired
-	private RewardService rewardService;
+	private RewardsService rewardService;
 	
 	@RequestMapping("/calculateRewards")
 	public void calculateRewards(@RequestParam String userName) {

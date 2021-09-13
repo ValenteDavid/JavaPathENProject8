@@ -1,10 +1,12 @@
 package com.tourguide.reward.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tourguide.reward.bean.VisitedLocationBean;
 import com.tourguide.reward.dao.RewardDao;
 import com.tourguide.reward.domain.UserReward;
 import com.tourguide.reward.proxies.GpsProxy;
@@ -17,7 +19,7 @@ import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 
 @Service
-public class RewardServiceImpl implements RewardService{
+public class RewardsServiceImpl implements RewardsService{
 	private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 	
 	// proximity in miles
@@ -39,7 +41,11 @@ public class RewardServiceImpl implements RewardService{
 	private RewardCentral rewardsCentral;
 	
 	public void calculateRewards(String userName) {
-		List<VisitedLocation> userLocations = gpsProxy.getVisitedLocations(userName);
+		List<VisitedLocation> userLocations = 
+				gpsProxy.getVisitedLocations(userName).stream()
+				.map(visitedLocationBean -> VisitedLocationBean.convertToDomain(visitedLocationBean))
+				.collect(Collectors.toList());
+				
 		List<Attraction> attractions = gpsUtil.getAttractions();
 		
 		for(VisitedLocation visitedLocation : userLocations) {

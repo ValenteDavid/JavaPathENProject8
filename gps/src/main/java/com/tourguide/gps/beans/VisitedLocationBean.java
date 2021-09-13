@@ -3,16 +3,10 @@ package com.tourguide.gps.beans;
 import java.util.Date;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
 public class VisitedLocationBean {
-	
-	private static final Logger log = LoggerFactory.getLogger(VisitedLocationBean.class);
-
 
 	private final UUID userId;
 	private final double longitude;
@@ -20,7 +14,6 @@ public class VisitedLocationBean {
 	private final Date timeVisited;
 
 	public VisitedLocationBean(UUID userId, double longitude, double latitude, Date timeVisited) {
-		super();
 		this.userId = userId;
 		this.longitude = longitude;
 		this.latitude = latitude;
@@ -44,11 +37,9 @@ public class VisitedLocationBean {
 	}
 
 	public static VisitedLocation convertToModel(VisitedLocationBean visitedLocationBean) {
-		log.info(visitedLocationBean.toString());
 		return new VisitedLocation(
-				visitedLocationBean.getUserId(),new Location(
-						visitedLocationBean.getLatitude(), 
-						visitedLocationBean.getLongitude()),
+				visitedLocationBean.getUserId(),
+				new Location(visitedLocationBean.getLatitude(), visitedLocationBean.getLongitude()),
 				visitedLocationBean.getTimeVisited());
 	}
 
@@ -57,5 +48,5 @@ public class VisitedLocationBean {
 		return "VisitedLocationBean [userId=" + userId + ", longitude=" + longitude + ", latitude=" + latitude
 				+ ", timeVisited=" + timeVisited + "]";
 	}
-	
+
 }

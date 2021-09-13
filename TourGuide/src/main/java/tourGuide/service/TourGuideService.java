@@ -54,12 +54,12 @@ public class TourGuideService {
 		return user.getUserRewards();
 	}
 	
-	public VisitedLocation getUserLocation(User user) {
-		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
-			user.getLastVisitedLocation() :
-			trackUserLocation(user);
-		return visitedLocation;
-	}
+//	public VisitedLocation getUserLocation(User user) {
+//		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
+//			user.getLastVisitedLocation() :
+//			trackUserLocation(user);
+//		return visitedLocation;
+//	}
 	
 	public User getUser(String userName) {
 		return internalUserMap.get(userName);

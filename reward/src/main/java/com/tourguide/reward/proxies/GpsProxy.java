@@ -9,8 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
+import com.tourguide.reward.bean.AttractionBean;
+import com.tourguide.reward.bean.VisitedLocationBean;
 
 @FeignClient(name = "gps", url = "localhost:9000")
 public interface GpsProxy {
@@ -19,9 +19,9 @@ public interface GpsProxy {
 	void addVisitedLocation(@RequestParam UUID uuid,@RequestParam double latitude,@RequestParam double longitude,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited);
 
 	@RequestMapping("/getAttractions")
-	List<Attraction> getAttractions();
+	List<AttractionBean> getAttractions();
 	
 	@RequestMapping("/getVisitedLocations")
-	List<VisitedLocation> getVisitedLocations(@RequestParam String userName);
+	List<VisitedLocationBean> getVisitedLocations(@RequestParam String userName);
 
 }
