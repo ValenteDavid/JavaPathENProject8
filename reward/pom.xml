@@ -40,14 +40,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>gpsUtil</groupId>
-			<artifactId>gpsUtil</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/src/main/resources/libs/gpsUtil.jar</systemPath>
-		</dependency>
+		
 		<dependency>
 			<groupId>RewardCentral</groupId>
 			<artifactId>RewardCentral</artifactId>

@@ -1,30 +1,39 @@
 package com.tourguide.reward.domain;
 
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
+import java.util.UUID;
 
 public class UserReward {
 
-	public final VisitedLocation visitedLocation;
-	public final Attraction attraction;
+	private final UUID userId;
+	private final UUID visitedLocationId;
+	private final UUID attractionId;
 	private int rewardPoints;
-	public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
-		this.visitedLocation = visitedLocation;
-		this.attraction = attraction;
+
+	public UserReward(UUID userId, UUID visitedLocationId, UUID attractionId, int rewardPoints) {
+		this.userId = userId;
+		this.visitedLocationId = visitedLocationId;
+		this.attractionId = attractionId;
 		this.rewardPoints = rewardPoints;
-	}
-	
-	public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
-		this.visitedLocation = visitedLocation;
-		this.attraction = attraction;
 	}
 
 	public void setRewardPoints(int rewardPoints) {
 		this.rewardPoints = rewardPoints;
 	}
-	
+
 	public int getRewardPoints() {
 		return rewardPoints;
 	}
-	
+
+	public UUID getVisitedLocationId() {
+		return visitedLocationId;
+	}
+
+	public UUID getAttractionId() {
+		return attractionId;
+	}
+
+	public UUID getUserId() {
+		return userId;
+	}
+
 }

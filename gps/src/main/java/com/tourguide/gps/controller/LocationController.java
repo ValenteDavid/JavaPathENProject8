@@ -39,22 +39,29 @@ public class LocationController {
 	}
 
 	@RequestMapping("/getVisitedLocations")
-	public List<VisitedLocationDto> getVisitedLocations(String userName) {
-		List<VisitedLocationDto> visitedLocationDtoList = 
-				gpsService.getVisitedLocations(userName).stream()
+	public List<VisitedLocationDto> getVisitedLocations(@RequestParam String userName) {
+		List<VisitedLocationDto> visitedLocationDtoList = gpsService.getVisitedLocations(userName).stream()
 				.map(visitedLocation -> VisitedLocationDto.convertToDto(visitedLocation))
 				.collect(Collectors.toList());
 		return visitedLocationDtoList;
 	}
-	
-	@RequestMapping("/getAttractions")
+
 	public List<AttractionDto> getAttractions() {
-		List<AttractionDto> AttractionDTOList =
-				gpsService.getAttractions().stream()
-						.map(attraction -> AttractionDto.convertToDto(attraction))
-						.collect(Collectors.toList());
+		List<AttractionDto> AttractionDTOList = gpsService.getAttractions().stream()
+				.map(attraction -> AttractionDto.convertToDto(attraction))
+				.collect(Collectors.toList());
 
 		return AttractionDTOList;
+	}
+	
+	@RequestMapping("/nearAttraction")
+	public boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
+			@RequestParam double location2Latitude, @RequestParam double location2Longitude, int nearMaxDistance) {
+		return gpsService.nearAttraction(
+				new Location(location1Latitude, location1Longitude),
+				new Location(location2Latitude, location2Longitude),
+				nearMaxDistance);
+
 	}
 
 }

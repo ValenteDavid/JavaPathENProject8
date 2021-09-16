@@ -20,4 +20,6 @@ public interface GpsService {
 	
 	List<Attraction> getAttractions();
 
+	boolean nearAttraction(Location location1, Location location2, int nearMaxDistance);
+
 }

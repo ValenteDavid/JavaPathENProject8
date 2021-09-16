@@ -17,7 +17,8 @@ public class RewardDaoImpl implements RewardDao {
 	@Override
 	public List<UserReward> findByUserId(UUID userId) {
 		return userRewards.stream()
-		.filter(userReward -> userReward.visitedLocation.userId.equals(userId))
+		.filter(userReward -> userReward.getUserId()
+				.equals(userId))
 		.collect(Collectors.toList());
 	}
 

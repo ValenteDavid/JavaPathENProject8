@@ -42,7 +42,7 @@ public class UserApplication {
 	@Bean
 	CommandLineRunner runner(Environment env) {
 		return args -> {
-
+			
 			IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
 
 				// Create and Save User
@@ -53,19 +53,20 @@ public class UserApplication {
 				logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
 				userDao.save(user);
 
-				// Create VisitedLocation associate user
-				IntStream.range(0, 3).forEach(j -> {
-					gpsProxy.addVisitedLocation(
-							user.getUserId(),
-							generateRandomLatitude(),
-							generateRandomLongitude(),
+				if (i != 5) {
+					// Create VisitedLocation associate user
+					IntStream.range(0, 3).forEach(j -> {
+						gpsProxy.addVisitedLocation(
+								user.getUserId(),
+								generateRandomLatitude(),
+								generateRandomLongitude(),
 //							getRandomTime());
-							new Date());
-				});
-				
+								new Date());
+					});
+				}
 			});
-
 		};
+		
 	}
 
 	private double generateRandomLongitude() {
@@ -84,5 +85,4 @@ public class UserApplication {
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
 		return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
 	}
-
 }

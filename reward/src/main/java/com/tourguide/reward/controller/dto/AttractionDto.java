@@ -1,10 +1,8 @@
-package com.tourguide.reward.bean;
+package com.tourguide.reward.controller.dto;
 
 import java.util.UUID;
 
-import gpsUtil.location.Attraction;
-
-public class AttractionBean {
+public class AttractionDto {
 
 	private String attractionName;
 	private String city;
@@ -14,10 +12,10 @@ public class AttractionBean {
 	private double latitude;
 	private double longitude;
 
-	public AttractionBean() {
+	public AttractionDto() {
 	}
 
-	public AttractionBean(String attractionName, String city, String state, UUID attractionId, double latitude,
+	public AttractionDto(String attractionName, String city, String state, UUID attractionId, double latitude,
 			double longitude) {
 		this.attractionName = attractionName;
 		this.city = city;
@@ -49,11 +47,6 @@ public class AttractionBean {
 
 	public double getLongitude() {
 		return longitude;
-	}
-
-	public static AttractionBean convertToDto(Attraction attraction) {
-		return new AttractionBean(attraction.attractionName,
-				attraction.city, attraction.state, attraction.attractionId, attraction.latitude, attraction.longitude);
 	}
 
 	@Override
