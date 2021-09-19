@@ -7,34 +7,36 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.tourguide.gps.domain.VisitedLocationWithUserName;
+
 import gpsUtil.location.VisitedLocation;
 
 @Repository
 public class VisitedLocationDaoImpl implements VisitedLocationDao {
 
-	private List<VisitedLocation> visitedLocations = new ArrayList<VisitedLocation>();
+	private List<VisitedLocationWithUserName> visitedLocationsWithUserNameList = new ArrayList<VisitedLocationWithUserName>();
 
 	@Override
-	public List<VisitedLocation> findByUUID(UUID userId) {
-		return visitedLocations.stream()
+	public List<VisitedLocationWithUserName> findByUUID(UUID userId) {
+		return visitedLocationsWithUserNameList.stream()
 				.filter(visitedLocations -> visitedLocations.userId.equals(userId))
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public VisitedLocation save(VisitedLocation visitedLocation) {
-		visitedLocations.add(visitedLocation);
-		return visitedLocation;
+	public VisitedLocationWithUserName save(VisitedLocationWithUserName visitedLocationWithUserName) {
+		visitedLocationsWithUserNameList.add(visitedLocationWithUserName);
+		return visitedLocationWithUserName;
 	}
 
 	@Override
-	public VisitedLocation findByUUIDOrderByTimeVisitedDesc(UUID userId) {
-		List<VisitedLocation> visitedLocationByUUID = findByUUID(userId);
-		VisitedLocation visitedLocationLast = visitedLocationByUUID.get(0);
+	public VisitedLocationWithUserName findByUUIDOrderByTimeVisitedDesc(UUID userId) {
+		List<VisitedLocationWithUserName> visitedLocationByUUID = findByUUID(userId);
+		VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
 		
-		for (VisitedLocation visitedLocation : visitedLocationByUUID) {
-			if (visitedLocation.timeVisited.before(visitedLocationLast.timeVisited)) {
-				visitedLocationLast=visitedLocation;
+		for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
+			if (visitedLocationWithUserName.getTimeVisited().before(visitedLocationLast.getTimeVisited())) {
+				visitedLocationLast=visitedLocationWithUserName;
 			}
 		}
 		return visitedLocationLast;

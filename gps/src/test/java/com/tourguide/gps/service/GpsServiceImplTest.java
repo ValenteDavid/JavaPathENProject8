@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.tourguide.gps.GpsApplication;
 import com.tourguide.gps.dao.VisitedLocationDao;
+import com.tourguide.gps.domain.VisitedLocationWithUserName;
 import com.tourguide.gps.proxies.UserProxy;
 
 import gpsUtil.GpsUtil;
@@ -44,9 +45,9 @@ class GpsServiceImplTest {
 		String userName = "jon";
 		UUID userId = UUID.randomUUID();
 
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(1, 1), new Date());
-		List<VisitedLocation> visitedLocationList = new ArrayList<>();
-		visitedLocationList.add(new VisitedLocation(userId, new Location(2, 2), new Date()));
+		VisitedLocationWithUserName visitedLocation = new VisitedLocationWithUserName(UUID.randomUUID(), userId,userName, new Location(1, 1), new Date());
+		List<VisitedLocationWithUserName> visitedLocationList = new ArrayList<>();
+		visitedLocationList.add(new VisitedLocationWithUserName(UUID.randomUUID(),userId,userName, new Location(2, 2), new Date()));
 		
 		
 		when(userProxy.getUserId(userName)).thenReturn(userId);
@@ -65,14 +66,14 @@ class GpsServiceImplTest {
 		String userName = "jon";
 		UUID userId = UUID.randomUUID();
 		
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(1, 1), new Date());
+		VisitedLocationWithUserName visitedLocation = new VisitedLocationWithUserName(UUID.randomUUID(), userId,userName, new Location(1, 1), new Date());
 
 		when(userProxy.getUserId(userName)).thenReturn(userId);
-		when(visitedLocationDao.findByUUID(userId)).thenReturn(new ArrayList<VisitedLocation>());
-		when(trackService.trackUserLocation(userName)).thenReturn(visitedLocation);
+		when(visitedLocationDao.findByUUID(userId)).thenReturn(new ArrayList<VisitedLocationWithUserName>());
+		when(trackService.trackUserLocation(userId, userName)).thenReturn(visitedLocation);
 		Location location = gpsService.getUserLocation(userName);
 
-		verify(trackService,times(1)).trackUserLocation(userName);
+		verify(trackService,times(1)).trackUserLocation(userId, userName);
 		assertTrue(visitedLocation.userId.equals(userId));
 		assertNotNull(location);
 	}

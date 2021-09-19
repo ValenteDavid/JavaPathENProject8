@@ -3,14 +3,16 @@ package com.tourguide.gps.dao;
 import java.util.List;
 import java.util.UUID;
 
+import com.tourguide.gps.domain.VisitedLocationWithUserName;
+
 import gpsUtil.location.VisitedLocation;
 
 public interface VisitedLocationDao {
 
-	List<VisitedLocation> findByUUID(UUID userId);
+	List<VisitedLocationWithUserName> findByUUID(UUID userId);
 
-	VisitedLocation save(VisitedLocation visitedLocation);
+	VisitedLocationWithUserName save(VisitedLocationWithUserName visitedLocationWithUserName);
 
-	VisitedLocation findByUUIDOrderByTimeVisitedDesc(UUID userId);
+	VisitedLocationWithUserName findByUUIDOrderByTimeVisitedDesc(UUID userId);
 
 }

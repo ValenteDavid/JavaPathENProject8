@@ -22,4 +22,9 @@ public class RewardController {
 	public void calculateRewards(@RequestParam UUID userId,@RequestParam List<VisitedLocationWithUserNameDto> userVisitedLocations, @RequestParam List<AttractionDto> attractions) {
 		rewardService.calculateRewards(userId, userVisitedLocations, attractions);
 	}
+	
+//	@RequestMapping("/getRewards")
+//	public int getRewards(@RequestParam String userName) {
+//		return rewardService.getRewards(userName);
+//	}
 }

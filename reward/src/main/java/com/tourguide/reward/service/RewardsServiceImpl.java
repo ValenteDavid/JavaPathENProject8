@@ -20,7 +20,8 @@ public class RewardsServiceImpl implements RewardsService {
 	// proximity in miles
 	private int defaultProximityBuffer = 10;
 	private int proximityBuffer = defaultProximityBuffer;
-	private int attractionProximityRange = 200;
+//	private int attractionProximityRange = 200;
+	private int attractionProximityRange = 999999999;
 
 	@Autowired
 	private GpsProxy gpsProxy;

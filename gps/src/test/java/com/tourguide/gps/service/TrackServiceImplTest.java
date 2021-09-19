@@ -1,6 +1,7 @@
 package com.tourguide.gps.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -39,12 +40,12 @@ class TrackServiceImplTest {
 
 		when(userProxy.getUserId(userName)).thenReturn(userId);
 		when(gpsUtil.getUserLocation(userId)).thenReturn(visitedLocationCreate);
-		doNothing().when(rewardProxy).calculateRewards(userName);
+		doNothing().when(rewardProxy).calculateRewards(userId,any(),any());
 		
 //		InternalTestHelper.setInternalUserNumber(0);
 
 		
-		VisitedLocation visitedLocation = trackService.trackUserLocation("jon");
+		VisitedLocation visitedLocation = trackService.trackUserLocation(userId, "jon");
 //		tourGuideService.tracker.stopTracking();
 
 		assertEquals(userId, visitedLocation.userId);

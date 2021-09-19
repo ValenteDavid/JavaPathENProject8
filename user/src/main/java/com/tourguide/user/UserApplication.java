@@ -58,6 +58,7 @@ public class UserApplication {
 					IntStream.range(0, 3).forEach(j -> {
 						gpsProxy.addVisitedLocation(
 								user.getUserId(),
+								user.getUserName(),
 								generateRandomLatitude(),
 								generateRandomLongitude(),
 //							getRandomTime());

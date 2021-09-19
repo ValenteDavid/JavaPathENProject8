@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface GpsProxy {
 	
 	@RequestMapping("/addVisitedLocation")
-	void addVisitedLocation(@RequestParam UUID uuid,@RequestParam double latitude,@RequestParam double longitude,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited);
+	void addVisitedLocation(@RequestParam UUID uuid,@RequestParam String userName, @RequestParam double latitude,
+			@RequestParam double longitude,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited);
 	
 	
 
