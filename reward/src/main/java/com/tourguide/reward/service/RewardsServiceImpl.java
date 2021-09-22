@@ -56,6 +56,7 @@ public class RewardsServiceImpl implements RewardsService {
 		}
 	}
 
+	@Override
 	public List<UserReward> getUserRewards(UUID userId) {
 		return rewardDao.findByUserId(userId);
 	}

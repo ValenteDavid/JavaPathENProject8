@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tourguide.reward.controller.dto.AttractionDto;
 import com.tourguide.reward.controller.dto.VisitedLocationWithUserNameDto;
+import com.tourguide.reward.domain.UserReward;
 import com.tourguide.reward.service.RewardsService;
 
 @RestController
@@ -23,8 +24,8 @@ public class RewardController {
 		rewardService.calculateRewards(userId, userVisitedLocations, attractions);
 	}
 	
-//	@RequestMapping("/getRewards")
-//	public int getRewards(@RequestParam String userName) {
-//		return rewardService.getRewards(userName);
-//	}
+	@RequestMapping("/getRewards")
+	public List<UserReward> getRewards(@RequestParam UUID userId,@RequestParam String userName) {
+		return rewardService.getUserRewards(userId);
+	}
 }
