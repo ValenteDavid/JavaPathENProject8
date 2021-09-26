@@ -88,15 +88,13 @@ public class GpsServiceImpl implements GpsService {
 	}
 	
 	@Override
-	public List<Attraction> getUserNearByAttractions(String userName) {
+	public List<Attraction> getUserNearByAttractions(VisitedLocation visitedLocation) {
 		List<Attraction> nearbyAttractionsList = new ArrayList<>();
-		Location userLocation = getUserLocation(userName);
 		for(Attraction attraction : gpsUtil.getAttractions()) {
-			if(isWithinAttractionProximity(attraction, userLocation)) {
+			if(isWithinAttractionProximity(attraction, visitedLocation.location)) {
 				nearbyAttractionsList.add(attraction);
 			}
 		}
-		nearbyAttractionsList.sort((a1, a2) -> Double.compare(getDistance(a1,userLocation), getDistance(a2,userLocation)));
 		return nearbyAttractionsList;
 	}
 	

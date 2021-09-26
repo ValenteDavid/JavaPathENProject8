@@ -29,14 +29,46 @@ public class LocationController {
 
 	@Autowired
 	private GpsService gpsService;
-	@Autowired
-	private RewardProxy rewardProxy;
-
+	
 	@RequestMapping("/getLocation")
 	public LocationDto getLocation(@RequestParam String userName) {
 		LocationDto locationDto;
 		locationDto = LocationDto.convertToDto(gpsService.getUserLocation(userName));
 		return locationDto;
+	}
+	
+	 //  TODO: Change this method to no longer return a List of Attractions.
+ 	//  Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
+ 	//  Return a new JSON object that contains:
+    	// Name of Tourist attraction, 
+        // Tourist attractions lat/long, 
+        // The user's location lat/long, 
+        // The distance in miles between the user's location and each of the attractions.
+        // The reward points for visiting each Attraction.
+        //    Note: Attraction reward points can be gathered from RewardsCentral
+	@RequestMapping("/getNearbyAttractions")
+	public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+		VisitedLocation visitedLocation = gpsService.getUserVisitedLocation(userName);
+		List<Attraction> nearbyAttractionsList = gpsService.getUserNearByAttractions(visitedLocation);
+		return nearbyAttractionsList;
+	}
+	
+	@RequestMapping("/getAllCurrentLocations")
+	public String getAllCurrentLocations() {
+		// TODO: Get a list of every user's most recent location as JSON
+		// - Note: does not use gpsUtil to query for their current location,
+		// but rather gathers the user's current location from their stored location
+		// history.
+		//
+		// Return object should be the just a JSON mapping of userId to Locations
+		// similar to:
+		// {
+		// "019b04a9-067a-4c76-8817-ee75088c3822":
+		// {"longitude":-48.188821,"latitude":74.84371}
+		// ...
+		// }
+
+		return JsonStream.serialize("");
 	}
 
 	@RequestMapping("/addVisitedLocation")
@@ -54,14 +86,6 @@ public class LocationController {
 		return visitedLocationDtoList;
 	}
 
-	public List<AttractionDto> getAttractions() {
-		List<AttractionDto> AttractionDTOList = gpsService.getAttractions().stream()
-				.map(attraction -> AttractionDto.convertToDto(attraction))
-				.collect(Collectors.toList());
-
-		return AttractionDTOList;
-	}
-
 	@RequestMapping("/nearAttraction")
 	public boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
 			@RequestParam double location2Latitude, @RequestParam double location2Longitude, int nearMaxDistance) {
@@ -69,27 +93,6 @@ public class LocationController {
 				new Location(location1Latitude, location1Longitude),
 				new Location(location2Latitude, location2Longitude),
 				nearMaxDistance);
-	}
-
-	@RequestMapping("/getNearbyAttractions")
-	public List<NearbyAttractionsDto> getNearbyAttractions(@RequestParam String userName) {
-		List<NearbyAttractionsDto> nearbyAttractionsDtoList = new ArrayList<>();
-
-		List<Attraction> attractionsList = gpsService.getUserNearByAttractions(userName);
-		int maxNb = attractionsList.size()>=5?4:attractionsList.size();
-		for (Attraction attraction : attractionsList.subList(0, maxNb)) {
-
-			Location userLocation = gpsService.getUserLocation(userName);
-//			int rewardPoint = rewardProxy.getRewards(userName);
-			int rewardPoint = 0;
-			nearbyAttractionsDtoList.add(new NearbyAttractionsDto(
-					userName,
-					attraction.latitude, attraction.longitude,
-					userLocation.latitude, userLocation.longitude,
-					gpsService.getDistance(userLocation, attraction),
-					rewardPoint));
-		}
-		return nearbyAttractionsDtoList;
 	}
 
 }

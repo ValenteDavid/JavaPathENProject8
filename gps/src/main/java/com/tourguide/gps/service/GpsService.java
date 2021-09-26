@@ -24,12 +24,12 @@ public interface GpsService {
 
 	VisitedLocation getUserVisitedLocation(String userName);
 
-	List<Attraction> getUserNearByAttractions(String userName);
-
 	double getDistance(Location loc1, Location loc2);
 
 	void addVisitedLocation(UUID userId,String userName, Location location, Date timeVisited);
 	
 	VisitedLocationWithUserName createVistitedLocationWithUserName(UUID userId,String userName);
+
+	List<Attraction> getUserNearByAttractions(VisitedLocation visitedLocation);
 
 }
