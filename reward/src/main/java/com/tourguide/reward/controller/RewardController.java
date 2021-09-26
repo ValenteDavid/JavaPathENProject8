@@ -28,4 +28,10 @@ public class RewardController {
 	public List<UserReward> getRewards(@RequestParam UUID userId,@RequestParam String userName) {
 		return rewardService.getUserRewards(userId);
 	}
+	
+	@RequestMapping("/getRewardsPoints")
+	public int getRewardsPoints(@RequestParam String userName) {
+		//TODO
+		return 0;
+	}
 }

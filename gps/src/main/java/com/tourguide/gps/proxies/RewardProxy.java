@@ -16,7 +16,4 @@ public interface RewardProxy {
 	@RequestMapping("/calculateRewards")
 	void calculateRewards(@RequestParam UUID userId,@RequestParam List<VisitedLocationWithUserNameDto> userVisitedLocations, @RequestParam List<AttractionDto> attractions);
 
-	@RequestMapping("/getRewards")
-	int getRewards(@RequestParam String userName);
-
 }
