@@ -1,5 +1,6 @@
 package com.tourguide.gps.proxies;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,5 +12,8 @@ public interface UserProxy {
 	
 	@RequestMapping("/getUserId")
 	UUID getUserId(@RequestParam String userName);
+	
+	@RequestMapping("/getUserIdAll")
+	public List<UUID> getUserIdAll();
 
 }

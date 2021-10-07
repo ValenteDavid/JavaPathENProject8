@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gpsUtil.GpsUtil;
@@ -122,7 +123,7 @@ public class TourGuideService {
 			String userName = "internalUser" + i;
 			String phone = "000";
 			String email = userName + "@tourGuide.com";
-			User user = new User(UUID.randomUUID(), userName, phone, email);
+			User user = new User(UUID.nameUUIDFromBytes(userName.getBytes()), userName, phone, email);
 			generateUserLocationHistory(user);
 			
 			internalUserMap.put(userName, user);

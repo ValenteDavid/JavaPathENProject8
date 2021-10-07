@@ -1,5 +1,6 @@
 package com.tourguide.user.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class UserController {
 	@RequestMapping("/getUserId")
 	public UUID getUserId(@RequestParam String userName) {
 		return userService.getUser(userName).getUserId();
+	}
+	
+	@RequestMapping("/getUserIdAll")
+	public List<UUID> getUserIdAll() {
+		return userService.getUserId();
 	}
 	
 	@RequestMapping("/getUserPreference")

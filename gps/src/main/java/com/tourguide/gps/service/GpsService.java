@@ -32,4 +32,6 @@ public interface GpsService {
 
 	List<Attraction> getUserNearByAttractions(VisitedLocation visitedLocation);
 
+	List<VisitedLocationWithUserName> getVisitedLocations(UUID userId);
+
 }

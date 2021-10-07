@@ -73,6 +73,11 @@ public class GpsServiceImpl implements GpsService {
 	}
 	
 	@Override
+	public List<VisitedLocationWithUserName> getVisitedLocations(UUID userId) {
+		return visitedLocationDao.findByUUID(userId);
+	}
+	
+	@Override
 	public VisitedLocation getLastVisitedLocation(String userName) {
 		return visitedLocationDao.findByUUIDOrderByTimeVisitedDesc(userProxy.getUserId(userName));
 	}

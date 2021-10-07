@@ -25,6 +25,32 @@ public class VisitedLocationWithUserNameDto {
 		this.longitude = longitude;
 		this.timeVisited = timeVisited;
 	}
+	
+	
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setUserId(UUID userId) {
+		this.userId = userId;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public void setTimeVisited(Date timeVisited) {
+		this.timeVisited = timeVisited;
+	}
 
 	public UUID getId() {
 		return id;

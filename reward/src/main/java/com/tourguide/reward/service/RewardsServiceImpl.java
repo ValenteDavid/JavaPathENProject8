@@ -33,7 +33,14 @@ public class RewardsServiceImpl implements RewardsService {
 	private RewardCentral rewardsCentral;
 
 	@Override
-	public void calculateRewards(UUID userId, List<VisitedLocationWithUserNameDto> userVisitedLocations,
+	public void calculateRewards(UUID userId, String userName) {
+		List<VisitedLocationWithUserNameDto> userVisitedLocations = gpsProxy.getVisitedLocations(userName);
+		List<AttractionDto> attractions = gpsProxy.getAttractions();
+		calculateRewards(userId, userVisitedLocations, attractions);
+	}
+
+	@Override
+	public synchronized void calculateRewards(UUID userId, List<VisitedLocationWithUserNameDto> userVisitedLocations,
 			List<AttractionDto> attractions) {
 		for (VisitedLocationWithUserNameDto visitedLocation : userVisitedLocations) {
 			for (AttractionDto attraction : attractions) {
@@ -43,7 +50,6 @@ public class RewardsServiceImpl implements RewardsService {
 										.equals(reward.getAttractionId()))
 								.map(attractionInList -> attractionInList.getAttractionName())
 								.findFirst().get()
-
 								.equals(attraction.getAttractionName()))
 						.count() == 0) {
 					if (gpsProxy.nearAttraction(visitedLocation.getLatitude(), visitedLocation.getLongitude(),

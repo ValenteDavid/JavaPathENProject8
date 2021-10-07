@@ -2,6 +2,8 @@ package com.tourguide.user.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,13 @@ public class UserDaoImpl implements UserDao {
 	public User save(User user) {
 		users.add(user);
 		return user;
+	}
+
+	@Override
+	public List<UUID> findAllId() {
+		return users.stream()
+				.map(user->user.getUserId())
+				.collect(Collectors.toList());
 	}
 
 }

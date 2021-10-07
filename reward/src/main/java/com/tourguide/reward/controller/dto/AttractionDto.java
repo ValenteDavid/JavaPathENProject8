@@ -25,6 +25,32 @@ public class AttractionDto {
 		this.longitude = longitude;
 	}
 
+	
+	
+	public void setAttractionName(String attractionName) {
+		this.attractionName = attractionName;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public void setAttractionId(UUID attractionId) {
+		this.attractionId = attractionId;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 	public String getAttractionName() {
 		return attractionName;
 	}

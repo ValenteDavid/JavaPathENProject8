@@ -49,7 +49,7 @@ public class UserApplication {
 				String userName = "internalUser" + i;
 				String phone = "000";
 				String email = userName + "@tourGuide.com";
-				User user = new User(UUID.randomUUID(), userName, phone, email);
+				User user = new User(UUID.nameUUIDFromBytes(userName.getBytes()), userName, phone, email);
 				logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
 				userDao.save(user);
 

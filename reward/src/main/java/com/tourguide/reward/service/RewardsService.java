@@ -14,4 +14,6 @@ public interface RewardsService {
 
 	List<UserReward> getUserRewards(UUID userId);
 
+	void calculateRewards(UUID userId, String userName);
+
 }
