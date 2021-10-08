@@ -11,15 +11,23 @@ import com.tourguide.reward.domain.UserReward;
 
 @Repository
 public class RewardDaoImpl implements RewardDao {
-	
+
 	List<UserReward> userRewards = new ArrayList<>();
 
 	@Override
 	public List<UserReward> findByUserId(UUID userId) {
 		return userRewards.stream()
-		.filter(userReward -> userReward.getUserId()
-				.equals(userId))
-		.collect(Collectors.toList());
+				.filter(userReward -> userReward.getUserId()
+						.equals(userId))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<UserReward> findByUserName(String userName) {
+		return userRewards.stream()
+				.filter(userReward -> userReward.getUserName()
+						.equals(userName))
+				.collect(Collectors.toList());
 	}
 
 	@Override

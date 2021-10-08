@@ -9,11 +9,13 @@ import com.tourguide.reward.domain.UserReward;
 
 public interface RewardsService {
 	
-	void calculateRewards(UUID userId, List<VisitedLocationWithUserNameDto> userVisitedLocations,
-			List<AttractionDto> attractions);
-
 	List<UserReward> getUserRewards(UUID userId);
 
 	void calculateRewards(UUID userId, String userName);
+
+	void calculateRewards(UUID userId, String userName, List<VisitedLocationWithUserNameDto> userVisitedLocations,
+			List<AttractionDto> attractions);
+
+	List<UserReward> getUserRewards(String userName);
 
 }

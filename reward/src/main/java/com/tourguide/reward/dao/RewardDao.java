@@ -11,4 +11,6 @@ public interface RewardDao {
 
 	UserReward save(UserReward userReward);
 
+	List<UserReward> findByUserName(String userName);
+
 }

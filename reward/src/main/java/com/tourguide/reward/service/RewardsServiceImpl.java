@@ -36,11 +36,11 @@ public class RewardsServiceImpl implements RewardsService {
 	public void calculateRewards(UUID userId, String userName) {
 		List<VisitedLocationWithUserNameDto> userVisitedLocations = gpsProxy.getVisitedLocations(userName);
 		List<AttractionDto> attractions = gpsProxy.getAttractions();
-		calculateRewards(userId, userVisitedLocations, attractions);
+		calculateRewards(userId, userName,userVisitedLocations, attractions);
 	}
 
 	@Override
-	public synchronized void calculateRewards(UUID userId, List<VisitedLocationWithUserNameDto> userVisitedLocations,
+	public synchronized void calculateRewards(UUID userId, String userName, List<VisitedLocationWithUserNameDto> userVisitedLocations,
 			List<AttractionDto> attractions) {
 		for (VisitedLocationWithUserNameDto visitedLocation : userVisitedLocations) {
 			for (AttractionDto attraction : attractions) {
@@ -54,7 +54,7 @@ public class RewardsServiceImpl implements RewardsService {
 						.count() == 0) {
 					if (gpsProxy.nearAttraction(visitedLocation.getLatitude(), visitedLocation.getLongitude(),
 							attraction.getLatitude(), attraction.getLongitude(), attractionProximityRange)) {
-						addUserRewards(new UserReward(userId, visitedLocation.getId(), attraction.getAttractionId(),
+						addUserRewards(new UserReward(userId,userName, visitedLocation.getId(), attraction.getAttractionId(),
 								getRewardPoints(attraction.getAttractionId(), userId)));
 					}
 				}
@@ -65,6 +65,11 @@ public class RewardsServiceImpl implements RewardsService {
 	@Override
 	public List<UserReward> getUserRewards(UUID userId) {
 		return rewardDao.findByUserId(userId);
+	}
+	
+	@Override
+	public List<UserReward> getUserRewards(String userName) {
+		return rewardDao.findByUserName(userName);
 	}
 
 	public UserReward addUserRewards(UserReward userReward) {

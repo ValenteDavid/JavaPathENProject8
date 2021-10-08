@@ -37,6 +37,7 @@ public class TripDealServiceImpl implements TripDealService {
 		int cumulatativeRewardPoints = rewardProxy.getRewardsPoints(userName);
 		UserPreferenceDto userPreference = userProxy.getUserPreference(userName);
 		UUID userId = userProxy.getUserId(userName);
+		//TODO 
 		List<Provider> providers = tripPricer.getPrice(
 				tripPricerApiKey, 
 				userId,

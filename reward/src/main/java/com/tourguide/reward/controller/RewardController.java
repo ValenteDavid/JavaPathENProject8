@@ -22,8 +22,8 @@ public class RewardController {
 	private RewardsService rewardService;
 	
 	@RequestMapping("/calculateRewardsPrefill")
-	public void calculateRewards(@RequestParam UUID userId,@RequestBody RewardDataDto rewardDataDto) {
-		rewardService.calculateRewards(userId, rewardDataDto.getUserVisitedLocations(), rewardDataDto.getAttractions());
+	public void calculateRewards(@RequestParam UUID userId,@RequestParam String userName,@RequestBody RewardDataDto rewardDataDto) {
+		rewardService.calculateRewards(userId, userName,rewardDataDto.getUserVisitedLocations(), rewardDataDto.getAttractions());
 	}
 	
 	@RequestMapping("/calculateRewards")
@@ -32,8 +32,8 @@ public class RewardController {
 	}
 	
 	@RequestMapping("/getRewards")
-	public List<UserReward> getRewards(@RequestParam UUID userId,@RequestParam String userName) {
-		return rewardService.getUserRewards(userId);
+	public List<UserReward> getRewards(@RequestParam String userName) {
+		return rewardService.getUserRewards(userName);
 	}
 	
 	@RequestMapping("/getRewardsPoints")
