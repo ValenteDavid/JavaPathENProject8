@@ -89,7 +89,7 @@ public class LocationController {
 
 	@RequestMapping("/nearAttraction")
 	public boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
-			@RequestParam double location2Latitude, @RequestParam double location2Longitude, int nearMaxDistance) {
+			@RequestParam double location2Latitude, @RequestParam double location2Longitude, @RequestParam int nearMaxDistance) {
 		return gpsService.nearAttraction(
 				new Location(location1Latitude, location1Longitude),
 				new Location(location2Latitude, location2Longitude),

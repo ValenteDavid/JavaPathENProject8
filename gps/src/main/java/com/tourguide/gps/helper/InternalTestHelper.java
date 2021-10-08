@@ -1,4 +1,4 @@
-package com.tourguide.gps.herlper;
+package com.tourguide.gps.helper;
 
 public class InternalTestHelper {
 

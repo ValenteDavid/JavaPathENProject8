@@ -17,4 +17,6 @@ public interface UserService {
 
 	List<UUID> getUserId();
 
+	List<User> getAllUsers();
+
 }

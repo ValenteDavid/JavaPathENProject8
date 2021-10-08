@@ -35,4 +35,9 @@ public class UserDaoImpl implements UserDao {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<User> getAll() {
+		return users;
+	}
+
 }

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.tourguide.gps.herlper.InternalTestHelper;
+import com.tourguide.gps.helper.InternalTestHelper;
 import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.TrackService;
 

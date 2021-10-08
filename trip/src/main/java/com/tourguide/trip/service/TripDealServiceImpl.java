@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Service;
 
-import com.jsoniter.output.JsonStream;
 import com.tourguide.trip.controller.dto.UserPreferenceDto;
 import com.tourguide.trip.dao.TripDealDao;
 import com.tourguide.trip.domain.TripDeal;
@@ -17,6 +15,7 @@ import com.tourguide.trip.proxies.UserProxy;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
+@Service
 public class TripDealServiceImpl implements TripDealService {
 	
 	private static final String tripPricerApiKey = "test-server-api-key";

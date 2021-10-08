@@ -27,6 +27,6 @@ public interface GpsProxy {
 
 	@RequestMapping("/nearAttraction")
 	boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
-			@RequestParam double location2Latitude, @RequestParam double location2Longitude, int nearMaxDistance);
+			@RequestParam double location2Latitude, @RequestParam double location2Longitude, @RequestParam int nearMaxDistance);
 
 }

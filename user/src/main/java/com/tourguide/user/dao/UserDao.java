@@ -13,4 +13,6 @@ public interface UserDao {
 
 	List<UUID> findAllId();
 
+	List<User> getAll();
+
 }

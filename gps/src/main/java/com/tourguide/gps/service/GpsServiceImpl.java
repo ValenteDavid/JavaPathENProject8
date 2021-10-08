@@ -139,6 +139,12 @@ public class GpsServiceImpl implements GpsService {
 		return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
 	}
 
+	@Override
+	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 }

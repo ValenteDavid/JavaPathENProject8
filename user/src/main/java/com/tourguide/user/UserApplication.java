@@ -53,18 +53,18 @@ public class UserApplication {
 				logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
 				userDao.save(user);
 
-				if (i != 5) {
-					// Create VisitedLocation associate user
-					IntStream.range(0, 3).forEach(j -> {
-						gpsProxy.addVisitedLocation(
-								user.getUserId(),
-								user.getUserName(),
-								generateRandomLatitude(),
-								generateRandomLongitude(),
-//							getRandomTime());
-								new Date());
-					});
-				}
+//				if (i != 5) {
+//					// Create VisitedLocation associate user
+//					IntStream.range(0, 3).forEach(j -> {
+//						gpsProxy.addVisitedLocation(
+//								user.getUserId(),
+//								user.getUserName(),
+//								generateRandomLatitude(),
+//								generateRandomLongitude(),
+////							getRandomTime());
+//								new Date());
+//					});
+//				}
 			});
 		};
 		
