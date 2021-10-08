@@ -34,6 +34,6 @@ public interface GpsService {
 
 	List<VisitedLocationWithUserName> getVisitedLocations(UUID userId);
 
-	List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
+	boolean isWithinAttractionProximity(Attraction attraction, Location location);
 
 }

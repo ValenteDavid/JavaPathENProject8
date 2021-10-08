@@ -100,9 +100,17 @@ public class GpsServiceImpl implements GpsService {
 				nearbyAttractionsList.add(attraction);
 			}
 		}
-		return nearbyAttractionsList;
+		nearbyAttractionsList.sort((a1, a2) -> Double.compare(getDistance(a1,visitedLocation.location), getDistance(a2,visitedLocation.location)));
+		int max;
+		if (nearbyAttractionsList.size()>5) {
+			max=5;
+		}else {
+			max=nearbyAttractionsList.size()-1;
+		}
+		return nearbyAttractionsList.subList(0, max);
 	}
 	
+	@Override
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
 		return getDistance(attraction, location) > attractionProximityRange ? false : true;
 	}
@@ -139,13 +147,5 @@ public class GpsServiceImpl implements GpsService {
 		return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
 	}
 
-	@Override
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
 }
 

@@ -19,7 +19,9 @@ import com.tourguide.gps.controller.dto.LocationDto;
 import com.tourguide.gps.controller.dto.NearbyAttractionsDto;
 import com.tourguide.gps.controller.dto.VisitedLocationDto;
 import com.tourguide.gps.proxies.RewardProxy;
+import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.GpsService;
+import com.tourguide.gps.service.TrackService;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
@@ -30,6 +32,12 @@ public class LocationController {
 
 	@Autowired
 	private GpsService gpsService;
+	@Autowired
+	private TrackService trackService;
+	@Autowired
+	private RewardProxy rewardProxy;
+	@Autowired
+	private UserProxy userProxy;
 	
 	@RequestMapping("/getLocation")
 	public LocationDto getLocation(@RequestParam String userName) {
@@ -38,20 +46,23 @@ public class LocationController {
 		return locationDto;
 	}
 	
-	 //  TODO: Change this method to no longer return a List of Attractions.
- 	//  Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
- 	//  Return a new JSON object that contains:
-    	// Name of Tourist attraction, 
-        // Tourist attractions lat/long, 
-        // The user's location lat/long, 
-        // The distance in miles between the user's location and each of the attractions.
-        // The reward points for visiting each Attraction.
-        //    Note: Attraction reward points can be gathered from RewardsCentral
-	@RequestMapping("/getNearbyAttractions")
-	public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
-		VisitedLocation visitedLocation = gpsService.getUserVisitedLocation(userName);
-		List<Attraction> nearbyAttractionsList = gpsService.getUserNearByAttractions(visitedLocation);
-		return nearbyAttractionsList;
+		@RequestMapping("/getNearbyAttractions")
+		public List<NearbyAttractionsDto> getNearbyAttractions(@RequestParam String userName) {
+			List<NearbyAttractionsDto> nearbyAttractionsDtoList = new ArrayList<>();
+			UUID userId = userProxy.getUserId(userName);
+			VisitedLocation visitedLocation = trackService.trackUserLocation(userId,userName);
+			List<Attraction> attractionsList = gpsService.getUserNearByAttractions(visitedLocation);
+			for (Attraction attraction : attractionsList) {
+				Location userLocation = gpsService.getUserLocation(userName);
+				int rewardPoint = rewardProxy.getRewardsPoints(attraction.attractionId,userId);
+				nearbyAttractionsDtoList.add(new NearbyAttractionsDto(
+						userName,
+						attraction.latitude, attraction.longitude,
+						userLocation.latitude, userLocation.longitude,
+						gpsService.getDistance(userLocation, attraction),
+						rewardPoint));
+			}
+			return nearbyAttractionsDtoList;
 	}
 	
 	@RequestMapping("/getAllCurrentLocations")

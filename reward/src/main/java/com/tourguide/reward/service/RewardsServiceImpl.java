@@ -76,7 +76,8 @@ public class RewardsServiceImpl implements RewardsService {
 		return rewardDao.save(userReward);
 	}
 
-	private int getRewardPoints(UUID attractionId, UUID userId) {
+	@Override
+	public int getRewardPoints(UUID attractionId, UUID userId) {
 		return rewardsCentral.getAttractionRewardPoints(attractionId, userId);
 	}
 

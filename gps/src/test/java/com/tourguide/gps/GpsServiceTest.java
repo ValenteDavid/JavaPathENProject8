@@ -1,6 +1,7 @@
 package com.tourguide.gps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import com.tourguide.gps.helper.InternalTestHelper;
 import com.tourguide.gps.service.GpsService;
 import com.tourguide.gps.service.TrackService;
 
+import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 
@@ -24,6 +26,8 @@ public class GpsServiceTest {
 	private GpsService gpsService;
 	@Autowired
 	private TrackService trackService;
+	@Autowired
+	private GpsUtil gpsUtil;
 
 //	@Test
 //	public void getUserLocation() {
@@ -37,7 +41,6 @@ public class GpsServiceTest {
 //		assertTrue(visitedLocation.userId.equals(user.getUserId()));
 //	}
 	
-	@Disabled  // Not yet implemented
 	@Test
 	public void getNearbyAttractions() {
 		String userName = "internalUser25";
@@ -46,11 +49,17 @@ public class GpsServiceTest {
 		
 		VisitedLocation visitedLocation = trackService.trackUserLocation(userId,userName);
 		
-		List<Attraction> attractions = gpsService.getNearByAttractions(visitedLocation);
+		List<Attraction> attractions = gpsService.getUserNearByAttractions(visitedLocation);
 		
 //		tourGuideService.tracker.stopTracking();
 		
 		assertEquals(5, attractions.size());
+	}
+	
+	@Test
+	public void isWithinAttractionProximity() {
+		Attraction attraction = gpsUtil.getAttractions().get(0);
+		assertTrue(gpsService.isWithinAttractionProximity(attraction, attraction));
 	}
 	
 }

@@ -13,9 +13,12 @@ import com.tourguide.gps.controller.dto.RewardDataDto;
 public interface RewardProxy {
 
 	@RequestMapping("/calculateRewardsPrefill")
-	public void calculateRewards(@RequestParam UUID userId,@RequestBody RewardDataDto rewardDataDto);
+	void calculateRewards(@RequestParam UUID userId,@RequestBody RewardDataDto rewardDataDto);
 	
 	@RequestMapping("/calculateRewards")
-	public void calculateRewards(@RequestParam UUID userId,@RequestParam String userName);
+	void calculateRewards(@RequestParam UUID userId,@RequestParam String userName);
+	
+	@RequestMapping("/getRewardsPoints")
+	int getRewardsPoints(@RequestParam UUID attractionId,@RequestParam UUID userId);
 	
 }

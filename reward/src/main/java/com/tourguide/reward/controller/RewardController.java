@@ -37,8 +37,7 @@ public class RewardController {
 	}
 	
 	@RequestMapping("/getRewardsPoints")
-	public int getRewardsPoints(@RequestParam String userName) {
-		//TODO
-		return 0;
+	public int getRewardsPoints(@RequestParam UUID attractionId,@RequestParam UUID userId) {
+		return rewardService.getRewardPoints(attractionId,userId);
 	}
 }

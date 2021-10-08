@@ -18,4 +18,6 @@ public interface RewardsService {
 
 	List<UserReward> getUserRewards(String userName);
 
+	int getRewardPoints(UUID attractionId, UUID userId);
+
 }
