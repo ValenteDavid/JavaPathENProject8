@@ -2,6 +2,8 @@ package com.tourguide.reward.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,27 +19,36 @@ import com.tourguide.reward.service.RewardsService;
 
 @RestController
 public class RewardController {
-	
+
 	@Autowired
 	private RewardsService rewardService;
-	
+
 	@RequestMapping("/calculateRewardsPrefill")
-	public void calculateRewards(@RequestParam UUID userId,@RequestParam String userName,@RequestBody RewardDataDto rewardDataDto) {
-		rewardService.calculateRewards(userId, userName,rewardDataDto.getUserVisitedLocations(), rewardDataDto.getAttractions());
+	public void calculateRewards(@RequestParam UUID userId, @RequestParam String userName,
+			@RequestBody RewardDataDto rewardDataDto) {
+		rewardService.calculateRewards(userId, userName, rewardDataDto.getUserVisitedLocations(),
+				rewardDataDto.getAttractions());
 	}
-	
+
 	@RequestMapping("/calculateRewards")
 	public void calculateRewards(@RequestParam UUID userId,@RequestParam String userName) {
-		rewardService.calculateRewards(userId,userName);
+		ExecutorService executor = Executors.newFixedThreadPool(5);
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				rewardService.calculateRewards(userId,userName);
+			}
+		});
+		executor.shutdown();
 	}
-	
+
 	@RequestMapping("/getRewards")
 	public List<UserReward> getRewards(@RequestParam String userName) {
 		return rewardService.getUserRewards(userName);
 	}
-	
+
 	@RequestMapping("/getRewardsPoints")
-	public int getRewardsPoints(@RequestParam UUID attractionId,@RequestParam UUID userId) {
-		return rewardService.getRewardPoints(attractionId,userId);
+	public int getRewardsPoints(@RequestParam UUID attractionId, @RequestParam UUID userId) {
+		return rewardService.getRewardPoints(attractionId, userId);
 	}
 }
