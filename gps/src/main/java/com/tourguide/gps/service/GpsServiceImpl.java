@@ -26,9 +26,9 @@ import gpsUtil.location.VisitedLocation;
 @Service
 public class GpsServiceImpl implements GpsService {
 	private static final Logger logger = LoggerFactory.getLogger(GpsServiceImpl.class);
-	
+
 	private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
-	private int attractionProximityRange = 99999999;
+	private int attractionProximityRange = 200;
 
 	@Autowired
 	private UserProxy userProxy;
@@ -36,8 +36,7 @@ public class GpsServiceImpl implements GpsService {
 	private TrackService trackService;
 	@Autowired
 	private GpsUtil gpsUtil;
-	
-	
+
 	@Autowired
 	private VisitedLocationDao visitedLocationDao;
 	
@@ -52,100 +51,72 @@ public class GpsServiceImpl implements GpsService {
 		if (getVisitedLocations(userName).size() > 0) {
 			visitedLocation = getLastVisitedLocation(userName);
 		} else {
-			visitedLocation = trackService.trackUserLocation(userProxy.getUserId(userName),userName);
+			visitedLocation = trackService.trackUserLocation(userProxy.getUserId(userName), userName);
 		}
 		return visitedLocation;
 	}
-	
+
 	@Override
-	public void addVisitedLocation(UUID userId,String userName, Location location, Date timeVisited) {
+	public void addVisitedLocation(UUID userId, String userName, Location location, Date timeVisited) {
 		visitedLocationDao.save(new VisitedLocationWithUserName(
 				UUID.randomUUID(),
 				userId,
-				userName
-				,location
-				,timeVisited));
+				userName, location, timeVisited));
 	}
 
 	@Override
 	public List<VisitedLocationWithUserName> getVisitedLocations(String userName) {
-		return visitedLocationDao.findByUUID(userProxy.getUserId(userName));
+		return visitedLocationDao.findByUserName(userName);
 	}
-	
+
 	@Override
 	public List<VisitedLocationWithUserName> getVisitedLocations(UUID userId) {
 		return visitedLocationDao.findByUUID(userId);
 	}
-	
+
 	@Override
 	public VisitedLocation getLastVisitedLocation(String userName) {
-		return visitedLocationDao.findByUUIDOrderByTimeVisitedDesc(userProxy.getUserId(userName));
+		return visitedLocationDao.findByUserNameOrderByTimeVisitedDesc(userName);
 	}
 
 	@Override
 	public List<Attraction> getAttractions() {
 		return gpsUtil.getAttractions();
 	}
-	
+
 	@Override
-	public boolean nearAttraction(@RequestParam Location location1,@RequestParam Location location2,int nearMaxDistance) {
+	public boolean nearAttraction(@RequestParam Location location1, @RequestParam Location location2,
+			int nearMaxDistance) {
 		return getDistance(location1, location2) > nearMaxDistance ? false : true;
 	}
-	
+
 	@Override
 	public List<Attraction> getUserNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractionsList = new ArrayList<>();
-		for(Attraction attraction : gpsUtil.getAttractions()) {
-			if(isWithinAttractionProximity(attraction, visitedLocation.location)) {
-				nearbyAttractionsList.add(attraction);
-			}
-		}
-		nearbyAttractionsList.sort((a1, a2) -> Double.compare(getDistance(a1,visitedLocation.location), getDistance(a2,visitedLocation.location)));
-		int max;
-		if (nearbyAttractionsList.size()>5) {
-			max=5;
-		}else {
-			max=nearbyAttractionsList.size()-1;
-		}
-		return nearbyAttractionsList.subList(0, max);
+		List<Attraction> nearbyAttractionsList = gpsUtil.getAttractions();
+		nearbyAttractionsList
+				.sort((a1, a2) -> Double.compare(getDistance(a1, visitedLocation.location),
+						getDistance(a2, visitedLocation.location)));
+		return nearbyAttractionsList.subList(0, 5);
 	}
-	
+
 	@Override
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
 		return getDistance(attraction, location) > attractionProximityRange ? false : true;
 	}
-	
+
 	@Override
 	public double getDistance(Location loc1, Location loc2) {
-        double lat1 = Math.toRadians(loc1.latitude);
-        double lon1 = Math.toRadians(loc1.longitude);
-        double lat2 = Math.toRadians(loc2.latitude);
-        double lon2 = Math.toRadians(loc2.longitude);
+		double lat1 = Math.toRadians(loc1.latitude);
+		double lon1 = Math.toRadians(loc1.longitude);
+		double lat2 = Math.toRadians(loc2.latitude);
+		double lon2 = Math.toRadians(loc2.longitude);
 
-        double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-                               + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+		double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
+				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
 
-        double nauticalMiles = 60 * Math.toDegrees(angle);
-        double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
-        return statuteMiles;
-	}
-	
-	public VisitedLocationWithUserName createVistitedLocationWithUserName(UUID userId,String userName) {
-		return new VisitedLocationWithUserName(UUID.randomUUID(),userId,userName, new Location(generateRandomLatitude(), generateRandomLongitude()),
-				new Date());
-	}
-	
-	private double generateRandomLongitude() {
-		double leftLimit = -180;
-		double rightLimit = 180;
-		return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
-	}
-
-	private double generateRandomLatitude() {
-		double leftLimit = -85.05112878;
-		double rightLimit = 85.05112878;
-		return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
+		double nauticalMiles = 60 * Math.toDegrees(angle);
+		double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
+		return statuteMiles;
 	}
 
 }
-

@@ -1,4 +1,4 @@
-package com.tourguide.user;
+package com.tourguide.user.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tourguide.user.UserApplication;
 import com.tourguide.user.domain.User;
+import com.tourguide.user.domain.UserPreferences;
 import com.tourguide.user.helper.InternalTestHelper;
 import com.tourguide.user.service.UserService;
 
@@ -35,10 +37,13 @@ public class UserServiceTest {
 		User retrivedUser = userService.getUser(user.getUserName());
 		User retrivedUser2 = userService.getUser(user2.getUserName());
 
-//		tourGuideService.tracker.stopTracking();
-		
 		assertEquals(user, retrivedUser);
 		assertEquals(user2, retrivedUser2);
+		
+		assertEquals(user.getUserId(), retrivedUser.getUserId());
+		assertEquals(user.getUserName(), retrivedUser.getUserName());
+		assertEquals(user.getPhoneNumber(), retrivedUser.getPhoneNumber());
+		assertEquals(user.getEmailAddress(), retrivedUser.getEmailAddress());
 	}
 	
 	@Test
@@ -55,10 +60,28 @@ public class UserServiceTest {
 		
 		List<User> allUsers = userService.getAllUsers();
 
-//		tourGuideService.tracker.stopTracking();
-		
 		assertTrue(allUsers.contains(user));
 		assertTrue(allUsers.contains(user2));
+	}
+	
+	@Test
+	public void getUserPreference() {
+		String userName = "internalUser25";
+		UserPreferences userPreference = new UserPreferences(UUID.nameUUIDFromBytes(userName.getBytes()),userName,5,5,5,0);
+		
+		InternalTestHelper.setInternalUserNumber(0);
+		
+		userService.addUserPreference(userPreference);
+		UserPreferences retrivedUserPreference = userService.getUserPreference(userName);
+		
+
+		assertEquals(userPreference, retrivedUserPreference);
+		
+		assertEquals(userPreference.getUserName(), retrivedUserPreference.getUserName());
+		assertEquals(userPreference.getTripDuration(), retrivedUserPreference.getTripDuration());
+		assertEquals(userPreference.getTicketQuantity(), retrivedUserPreference.getTicketQuantity());
+		assertEquals(userPreference.getNumberOfAdults(), retrivedUserPreference.getNumberOfAdults());
+		assertEquals(userPreference.getNumberOfChildren(), retrivedUserPreference.getNumberOfChildren());
 	}
 
 }

@@ -19,4 +19,6 @@ public interface UserService {
 
 	List<User> getAllUsers();
 
+	UserPreferences addUserPreference(UserPreferences userPreferences);
+
 }

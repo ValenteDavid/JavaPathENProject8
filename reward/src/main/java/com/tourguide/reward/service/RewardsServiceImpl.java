@@ -40,7 +40,7 @@ public class RewardsServiceImpl implements RewardsService {
 	}
 
 	@Override
-	public synchronized void calculateRewards(UUID userId, String userName, List<VisitedLocationWithUserNameDto> userVisitedLocations,
+	public void calculateRewards(UUID userId, String userName, List<VisitedLocationWithUserNameDto> userVisitedLocations,
 			List<AttractionDto> attractions) {
 		for (VisitedLocationWithUserNameDto visitedLocation : userVisitedLocations) {
 			for (AttractionDto attraction : attractions) {
@@ -72,6 +72,7 @@ public class RewardsServiceImpl implements RewardsService {
 		return rewardDao.findByUserName(userName);
 	}
 
+	@Override
 	public UserReward addUserRewards(UserReward userReward) {
 		return rewardDao.save(userReward);
 	}

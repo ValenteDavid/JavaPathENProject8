@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import com.tourguide.gps.controller.dto.AttractionDto;
 import com.tourguide.gps.controller.dto.LocationDto;
 import com.tourguide.gps.controller.dto.NearbyAttractionsDto;
 import com.tourguide.gps.controller.dto.VisitedLocationDto;
+import com.tourguide.gps.controller.dto.VisitedLocationWithUserNameDto;
 import com.tourguide.gps.proxies.RewardProxy;
 import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.GpsService;
@@ -38,33 +38,33 @@ public class LocationController {
 	private RewardProxy rewardProxy;
 	@Autowired
 	private UserProxy userProxy;
-	
+
 	@RequestMapping("/getLocation")
 	public LocationDto getLocation(@RequestParam String userName) {
 		LocationDto locationDto;
 		locationDto = LocationDto.convertToDto(gpsService.getUserLocation(userName));
 		return locationDto;
 	}
-	
-		@RequestMapping("/getNearbyAttractions")
-		public List<NearbyAttractionsDto> getNearbyAttractions(@RequestParam String userName) {
-			List<NearbyAttractionsDto> nearbyAttractionsDtoList = new ArrayList<>();
-			UUID userId = userProxy.getUserId(userName);
-			VisitedLocation visitedLocation = trackService.trackUserLocation(userId,userName);
-			List<Attraction> attractionsList = gpsService.getUserNearByAttractions(visitedLocation);
-			for (Attraction attraction : attractionsList) {
-				Location userLocation = gpsService.getUserLocation(userName);
-				int rewardPoint = rewardProxy.getRewardsPoints(attraction.attractionId,userId);
-				nearbyAttractionsDtoList.add(new NearbyAttractionsDto(
-						userName,
-						attraction.latitude, attraction.longitude,
-						userLocation.latitude, userLocation.longitude,
-						gpsService.getDistance(userLocation, attraction),
-						rewardPoint));
-			}
-			return nearbyAttractionsDtoList;
+
+	@RequestMapping("/getNearbyAttractions")
+	public List<NearbyAttractionsDto> getNearbyAttractions(@RequestParam String userName) {
+		List<NearbyAttractionsDto> nearbyAttractionsDtoList = new ArrayList<>();
+		UUID userId = userProxy.getUserId(userName);
+		VisitedLocation visitedLocation = trackService.trackUserLocation(userId, userName);
+		List<Attraction> attractionsList = gpsService.getUserNearByAttractions(visitedLocation);
+		for (Attraction attraction : attractionsList) {
+			Location userLocation = gpsService.getUserLocation(userName);
+			int rewardPoint = rewardProxy.getRewardsPoints(attraction.attractionId, userId);
+			nearbyAttractionsDtoList.add(new NearbyAttractionsDto(
+					userName,
+					attraction.latitude, attraction.longitude,
+					userLocation.latitude, userLocation.longitude,
+					gpsService.getDistance(userLocation, attraction),
+					rewardPoint));
+		}
+		return nearbyAttractionsDtoList;
 	}
-	
+
 	@RequestMapping("/getAllCurrentLocations")
 	public String getAllCurrentLocations() {
 		// TODO: Get a list of every user's most recent location as JSON
@@ -84,34 +84,36 @@ public class LocationController {
 	}
 
 	@RequestMapping("/addVisitedLocation")
-	public void addVisitedLocation(@RequestParam UUID uuid,@RequestParam String userName, @RequestParam double latitude,
+	public void addVisitedLocation(@RequestParam UUID uuid, @RequestParam String userName,
+			@RequestParam double latitude,
 			@RequestParam double longitude,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited) {
-		gpsService.addVisitedLocation(uuid,userName, new Location(latitude, longitude), timeVisited);
+		gpsService.addVisitedLocation(uuid, userName, new Location(latitude, longitude), timeVisited);
 	}
 
 	@RequestMapping("/getVisitedLocations")
-	public List<VisitedLocationDto> getVisitedLocations(@RequestParam String userName) {
-		List<VisitedLocationDto> visitedLocationDtoList = gpsService.getVisitedLocations(userName).stream()
-				.map(visitedLocation -> VisitedLocationDto.convertToDto(visitedLocation))
+	public List<VisitedLocationWithUserNameDto> getVisitedLocations(@RequestParam String userName) {
+		List<VisitedLocationWithUserNameDto> visitedLocationDtoList = gpsService.getVisitedLocations(userName).stream()
+				.map(visitedLocation -> VisitedLocationWithUserNameDto.convertToDto(visitedLocation, userName))
 				.collect(Collectors.toList());
 		return visitedLocationDtoList;
 	}
 
 	@RequestMapping("/nearAttraction")
 	public boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
-			@RequestParam double location2Latitude, @RequestParam double location2Longitude, @RequestParam int nearMaxDistance) {
+			@RequestParam double location2Latitude, @RequestParam double location2Longitude,
+			@RequestParam int nearMaxDistance) {
 		return gpsService.nearAttraction(
 				new Location(location1Latitude, location1Longitude),
 				new Location(location2Latitude, location2Longitude),
 				nearMaxDistance);
 	}
-	
+
 	@RequestMapping("/getAttractions")
-	public List<AttractionDto> getAttractions(){
+	public List<AttractionDto> getAttractions() {
 		return gpsService.getAttractions().stream()
-		.map(attraction->AttractionDto.convertToDto(attraction))
-		.collect(Collectors.toList());
+				.map(attraction -> AttractionDto.convertToDto(attraction))
+				.collect(Collectors.toList());
 	}
 
 }

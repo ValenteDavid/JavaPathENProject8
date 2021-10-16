@@ -44,6 +44,15 @@ public class VisitedLocationWithUserName extends VisitedLocation {
 	public Date getTimeVisited() {
 		return timeVisited;
 	}
+	
+	public static VisitedLocationWithUserName domainConvertTo(VisitedLocation visitedLocation,String userName) {
+		return new VisitedLocationWithUserName(
+				UUID.randomUUID(),
+				visitedLocation.userId,
+				userName,
+				visitedLocation.location,
+				visitedLocation.timeVisited);
+	}
 
 	public static VisitedLocation convertToDomain(VisitedLocationWithUserName visitedLocationWithUserName) {
 		return new VisitedLocation(

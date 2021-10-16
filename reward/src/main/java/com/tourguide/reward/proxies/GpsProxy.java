@@ -24,7 +24,6 @@ public interface GpsProxy {
 	@RequestMapping("/getVisitedLocations")
 	List<VisitedLocationWithUserNameDto> getVisitedLocations(@RequestParam String userName);
 	
-
 	@RequestMapping("/nearAttraction")
 	boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
 			@RequestParam double location2Latitude, @RequestParam double location2Longitude, @RequestParam int nearMaxDistance);

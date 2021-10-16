@@ -22,6 +22,13 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 				.filter(visitedLocations -> visitedLocations.userId.equals(userId))
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<VisitedLocationWithUserName> findByUserName(String userName) {
+		return visitedLocationsWithUserNameList.stream()
+				.filter(visitedLocations -> visitedLocations.getUserName().equals(userName))
+				.collect(Collectors.toList());
+	}
 
 	@Override
 	public VisitedLocationWithUserName save(VisitedLocationWithUserName visitedLocationWithUserName) {
@@ -32,6 +39,19 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 	@Override
 	public VisitedLocationWithUserName findByUUIDOrderByTimeVisitedDesc(UUID userId) {
 		List<VisitedLocationWithUserName> visitedLocationByUUID = findByUUID(userId);
+		VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
+		
+		for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
+			if (visitedLocationWithUserName.getTimeVisited().before(visitedLocationLast.getTimeVisited())) {
+				visitedLocationLast=visitedLocationWithUserName;
+			}
+		}
+		return visitedLocationLast;
+	}
+
+	@Override
+	public VisitedLocation findByUserNameOrderByTimeVisitedDesc(String userName) {
+		List<VisitedLocationWithUserName> visitedLocationByUUID = findByUserName(userName);
 		VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
 		
 		for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {

@@ -6,4 +6,6 @@ public interface UserPreferenceDao {
 
 	UserPreferences findByUserName(String userName);
 
+	UserPreferences save(UserPreferences UserPreferences);
+
 }

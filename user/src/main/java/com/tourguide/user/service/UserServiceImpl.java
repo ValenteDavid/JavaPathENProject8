@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	public UserPreferences getUserPreference(String userName) {
 		return userPreferenceDao.findByUserName(userName);
 	}
+	
+	@Override
+	public UserPreferences addUserPreference(UserPreferences userPreferences) {
+		return userPreferenceDao.save(userPreferences);
+	}
 
 	@Override
 	public List<UUID> getUserId() {

@@ -19,5 +19,11 @@ public class UserPreferenceDaoImpl implements UserPreferenceDao {
 		.findFirst()
 		.get();
 	}
+	
+	@Override
+	public UserPreferences save(UserPreferences UserPreferences) {
+		userPreferencesList.add(UserPreferences);
+		return UserPreferences;
+	}
 
 }

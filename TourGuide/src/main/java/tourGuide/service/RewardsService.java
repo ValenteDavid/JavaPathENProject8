@@ -49,10 +49,9 @@ public class RewardsService {
 		proximityBuffer = defaultProximityBuffer;
 	}
 
-	public synchronized void calculateRewards(User user) {
+	public void calculateRewards(User user) {
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
-//TODO clean
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
 				if(user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
@@ -62,19 +61,6 @@ public class RewardsService {
 				}
 			}
 		}
-//		for(VisitedLocation visitedLocation : userLocations) {
-//			for(Attraction attraction : attractions) {
-//				if (user.getUserRewards().stream()
-//						.filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
-//					if (nearAttraction(visitedLocation, attraction)) {
-//						rewardAdd.add(
-//								new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
-//					}
-//				}
-//			}
-//		}
-//
-//		rewardAdd.forEach(userReward -> user.addUserReward(userReward));
 	}
 
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {

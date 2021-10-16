@@ -15,4 +15,8 @@ public interface VisitedLocationDao {
 
 	VisitedLocationWithUserName findByUUIDOrderByTimeVisitedDesc(UUID userId);
 
+	List<VisitedLocationWithUserName> findByUserName(String userName);
+
+	VisitedLocation findByUserNameOrderByTimeVisitedDesc(String userName);
+
 }

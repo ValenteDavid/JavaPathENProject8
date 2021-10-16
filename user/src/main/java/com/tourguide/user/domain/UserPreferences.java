@@ -25,6 +25,19 @@ public class UserPreferences {
 		this.userId = userId;
 		this.userName = userName;
 	}
+	
+	public UserPreferences(UUID userId, String userName, int tripDuration, int ticketQuantity, int numberOfAdults,
+			int numberOfChildren) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.tripDuration = tripDuration;
+		this.ticketQuantity = ticketQuantity;
+		this.numberOfAdults = numberOfAdults;
+		this.numberOfChildren = numberOfChildren;
+	}
+
+
 
 	public UUID getUserId() {
 		return userId;
