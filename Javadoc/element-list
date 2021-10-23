@@ -1,0 +1,17 @@
+com.tourguide.gps
+com.tourguide.gps.controller
+com.tourguide.gps.controller.dto
+com.tourguide.gps.dao
+com.tourguide.gps.domain
+com.tourguide.gps.helper
+com.tourguide.gps.module
+com.tourguide.gps.proxies
+com.tourguide.gps.service
+com.tourguide.user
+com.tourguide.user.controller
+com.tourguide.user.controller.dto
+com.tourguide.user.dao
+com.tourguide.user.domain
+com.tourguide.user.helper
+com.tourguide.user.proxies
+com.tourguide.user.service
