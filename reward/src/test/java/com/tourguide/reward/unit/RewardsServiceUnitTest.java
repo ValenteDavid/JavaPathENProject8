@@ -49,7 +49,7 @@ public class RewardsServiceUnitTest {
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 
 		List<UserReward> rewardsReturn = new ArrayList<UserReward>();
-		rewardsReturn.add(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(), 5));
+		rewardsReturn.add(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(),"attractionName", 5));
 
 		when(rewardDao.findByUserId(userId)).thenReturn(rewardsReturn);
 		List<UserReward> userRewards = rewardsService.getUserRewards(userId);
@@ -65,7 +65,7 @@ public class RewardsServiceUnitTest {
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 
 		List<UserReward> rewardsReturn = new ArrayList<UserReward>();
-		rewardsReturn.add(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(), 5));
+		rewardsReturn.add(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(),"attractionName", 5));
 
 		when(rewardDao.findByUserName(userName)).thenReturn(rewardsReturn);
 		List<UserReward> userRewards = rewardsService.getUserRewards(userName);
@@ -76,6 +76,7 @@ public class RewardsServiceUnitTest {
 	@Test
 	public void calculateRewardsTest() {
 		InternalTestHelper.setInternalUserNumber(0);
+		rewardsService.setAttractionProximityRange(Integer.MAX_VALUE);
 
 		String userName = "internalUser25";
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
@@ -83,6 +84,7 @@ public class RewardsServiceUnitTest {
 		List<VisitedLocationWithUserNameDto> userVisitedLocations = new ArrayList<VisitedLocationWithUserNameDto>();
 		userVisitedLocations.add(new VisitedLocationWithUserNameDto(UUID.randomUUID(), userName, userId, 100, 100, new Date()));
 		when(gpsProxy.getVisitedLocations(userName)).thenReturn(userVisitedLocations);
+		
 		List<AttractionDto> attractions = new ArrayList<AttractionDto>();
 		attractions.add(new AttractionDto("attractionName", "city", "state", UUID.randomUUID(), 100, 100));
 		when(gpsProxy.getAttractions()).thenReturn(attractions);
@@ -94,7 +96,11 @@ public class RewardsServiceUnitTest {
 		
 		verify(gpsProxy,times(1)).getVisitedLocations(userName);
 		verify(gpsProxy,times(1)).getAttractions();
-		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		verify(rewardDao,atLeastOnce()).save(any());
 
 	}

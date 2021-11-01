@@ -5,10 +5,25 @@ import java.util.UUID;
 
 import tripPricer.Provider;
 
+/**
+ *   Trip Deal                            
+ * @author David
+ *
+ */
 public class TripDeal {
 	
+	/**
+	 * user id
+	 */
 	private final UUID userId;
+	/**
+	 * user name
+	 */
 	private final String userName;
+	/**
+	 * provider
+	 * @see Provider
+	 */
 	List<Provider> provider;
 	
 	public TripDeal(UUID userId, String userName) {

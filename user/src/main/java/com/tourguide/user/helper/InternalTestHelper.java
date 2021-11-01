@@ -1,5 +1,10 @@
 package com.tourguide.user.helper;
 
+
+/**
+ * Use for Test
+ *
+ */
 public class InternalTestHelper {
 
 	// Set this default up to 100,000 for testing

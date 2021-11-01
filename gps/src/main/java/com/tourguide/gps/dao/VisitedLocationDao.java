@@ -19,4 +19,10 @@ public interface VisitedLocationDao {
 
 	VisitedLocation findByUserNameOrderByTimeVisitedDesc(String userName);
 
+	List<VisitedLocationWithUserName> getVisitedLocationsWithUserNameList();
+
+	void setVisitedLocationsWithUserNameList(List<VisitedLocationWithUserName> visitedLocationsWithUserNameList);
+
+	void deleteAll();
+
 }

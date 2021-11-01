@@ -1,22 +1,15 @@
 package com.tourguide.gps.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tourguide.gps.dao.VisitedLocationDao;
 import com.tourguide.gps.domain.VisitedLocationWithUserName;
-import com.tourguide.gps.proxies.UserProxy;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
@@ -25,15 +18,10 @@ import gpsUtil.location.VisitedLocation;
 
 @Service
 public class GpsServiceImpl implements GpsService {
-	private static final Logger logger = LoggerFactory.getLogger(GpsServiceImpl.class);
 
 	private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 	private int attractionProximityRange = 200;
 
-	@Autowired
-	private UserProxy userProxy;
-	@Autowired
-	private TrackService trackService;
 	@Autowired
 	private GpsUtil gpsUtil;
 
@@ -47,13 +35,7 @@ public class GpsServiceImpl implements GpsService {
 
 	@Override
 	public VisitedLocation getUserVisitedLocation(String userName) {
-		VisitedLocation visitedLocation;
-		if (getVisitedLocations(userName).size() > 0) {
-			visitedLocation = getLastVisitedLocation(userName);
-		} else {
-			visitedLocation = trackService.trackUserLocation(userProxy.getUserId(userName), userName);
-		}
-		return visitedLocation;
+		return getLastVisitedLocation(userName);
 	}
 
 	@Override
@@ -77,6 +59,17 @@ public class GpsServiceImpl implements GpsService {
 	@Override
 	public VisitedLocation getLastVisitedLocation(String userName) {
 		return visitedLocationDao.findByUserNameOrderByTimeVisitedDesc(userName);
+	}
+	
+	@Override
+	public Location getLastLocation(String userName) {
+		VisitedLocation lastVisitedLocation = visitedLocationDao.findByUserNameOrderByTimeVisitedDesc(userName);
+		if(lastVisitedLocation == null) {
+			return null;
+		}
+		else {
+			return lastVisitedLocation.location;
+		}
 	}
 
 	@Override
@@ -117,6 +110,11 @@ public class GpsServiceImpl implements GpsService {
 		double nauticalMiles = 60 * Math.toDegrees(angle);
 		double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
 		return statuteMiles;
+	}
+
+	@Override
+	public void deleteAll() {
+		visitedLocationDao.deleteAll();
 	}
 
 }

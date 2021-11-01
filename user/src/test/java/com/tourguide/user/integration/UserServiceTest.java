@@ -14,6 +14,7 @@ import com.tourguide.user.UserApplication;
 import com.tourguide.user.domain.User;
 import com.tourguide.user.domain.UserPreferences;
 import com.tourguide.user.helper.InternalTestHelper;
+import com.tourguide.user.service.UserPreferenceService;
 import com.tourguide.user.service.UserService;
 
 @SpringBootTest(classes = UserApplication.class)
@@ -21,6 +22,8 @@ public class UserServiceTest {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserPreferenceService userPreferenceService;
 	
 	@Test
 	public void addUser() {
@@ -71,8 +74,8 @@ public class UserServiceTest {
 		
 		InternalTestHelper.setInternalUserNumber(0);
 		
-		userService.addUserPreference(userPreference);
-		UserPreferences retrivedUserPreference = userService.getUserPreference(userName);
+		userPreferenceService.save(userPreference);
+		UserPreferences retrivedUserPreference = userPreferenceService.get(userName);
 		
 
 		assertEquals(userPreference, retrivedUserPreference);

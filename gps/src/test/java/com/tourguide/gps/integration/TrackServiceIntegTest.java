@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.tourguide.gps.GpsApplication;
-import com.tourguide.gps.helper.InternalTestHelper;
 import com.tourguide.gps.proxies.RewardProxy;
+import com.tourguide.gps.service.GpsService;
 import com.tourguide.gps.service.TrackService;
 
 import gpsUtil.location.VisitedLocation;
@@ -22,6 +22,10 @@ public class TrackServiceIntegTest {
 	
 	@Autowired
 	private TrackService trackService;
+	
+	@Autowired
+	private GpsService gpsService;
+	
 	@MockBean
 	private RewardProxy rewardProxy;
 	
@@ -29,10 +33,15 @@ public class TrackServiceIntegTest {
 	public void trackUser() {
 		String userName = "internalUser25";
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
-		InternalTestHelper.setInternalUserNumber(0);
 		
 		doNothing().when(rewardProxy).calculateRewards(userId, userName);
-		VisitedLocation visitedLocation = trackService.trackUserLocation(userId,userName);
+		trackService.trackUserLocation(userId,userName);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		VisitedLocation visitedLocation= gpsService.getLastVisitedLocation(userName);
 		
 		assertEquals(userId, visitedLocation.userId);
 	}

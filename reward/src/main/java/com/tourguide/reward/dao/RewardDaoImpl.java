@@ -15,7 +15,12 @@ public class RewardDaoImpl implements RewardDao {
 	List<UserReward> userRewards = new ArrayList<>();
 
 	@Override
-	public List<UserReward> findByUserId(UUID userId) {
+	public List<UserReward> getUserRewards() {
+		return userRewards;
+	}
+
+	@Override
+	public synchronized List<UserReward> findByUserId(UUID userId) {
 		return userRewards.stream()
 				.filter(userReward -> userReward.getUserId()
 						.equals(userId))
@@ -23,17 +28,21 @@ public class RewardDaoImpl implements RewardDao {
 	}
 
 	@Override
-	public List<UserReward> findByUserName(String userName) {
+	public synchronized List<UserReward> findByUserName(String userName) {
 		return userRewards.stream()
-				.filter(userReward -> userReward.getUserName()
-						.equals(userName))
+				.filter(userReward -> userReward.getUserName().equals(userName))
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public UserReward save(UserReward userReward) {
+	public synchronized UserReward save(UserReward userReward) {
 		userRewards.add(userReward);
 		return userReward;
+	}
+
+	@Override
+	public void deleteAll() {
+		userRewards = new ArrayList<>();
 	}
 
 }

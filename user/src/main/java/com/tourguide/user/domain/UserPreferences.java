@@ -7,18 +7,41 @@ import javax.money.Monetary;
 
 import org.javamoney.moneta.Money;
 
-
+/**
+ * User preferences
+ *
+ */
 public class UserPreferences {
 	
+	/**
+	 * user id
+	 * @see User
+	 */
 	private final UUID userId;
+	/**
+	 * user name
+	 * @see User
+	 */
 	private final String userName;
 	private int attractionProximity = Integer.MAX_VALUE;
 	private CurrencyUnit currency = Monetary.getCurrency("USD");
 	private Money lowerPricePoint = Money.of(0, currency);
 	private Money highPricePoint = Money.of(Integer.MAX_VALUE, currency);
+	/**
+	 * trip duration
+	 */
 	private int tripDuration = 1;
+	/**
+	 * ticket quantity
+	 */
 	private int ticketQuantity = 1;
+	/**
+	 * number of adultes
+	 */
 	private int numberOfAdults = 1;
+	/**
+	 * number of children
+	 */
 	private int numberOfChildren = 0;
 	
 	public UserPreferences(UUID userId, String userName) {

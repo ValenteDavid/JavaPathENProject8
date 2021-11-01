@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tourguide.user.controller.dto.UserIdName;
 import com.tourguide.user.dao.UserDao;
 import com.tourguide.user.dao.UserPreferenceDao;
 import com.tourguide.user.domain.User;
@@ -16,9 +17,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired
-	private UserPreferenceDao userPreferenceDao;
 
 	@Override
 	public User getUser(String userName) {
@@ -31,16 +29,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserPreferences getUserPreference(String userName) {
-		return userPreferenceDao.findByUserName(userName);
-	}
-	
-	@Override
-	public UserPreferences addUserPreference(UserPreferences userPreferences) {
-		return userPreferenceDao.save(userPreferences);
-	}
-
-	@Override
 	public List<UUID> getUserId() {
 		return userDao.findAllId();
 	}
@@ -48,6 +36,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAllUsers() {
 		return userDao.getAll();
+	}
+
+	@Override
+	public List<UserIdName> getUserIdentification() {
+		return userDao.getUserIdentification();
 	}
 
 }

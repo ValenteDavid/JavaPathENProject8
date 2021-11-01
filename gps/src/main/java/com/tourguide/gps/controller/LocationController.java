@@ -12,33 +12,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jsoniter.output.JsonStream;
 import com.tourguide.gps.controller.dto.AttractionDto;
+import com.tourguide.gps.controller.dto.CurrentLocationDto;
 import com.tourguide.gps.controller.dto.LocationDto;
 import com.tourguide.gps.controller.dto.NearbyAttractionsDto;
-import com.tourguide.gps.controller.dto.VisitedLocationDto;
 import com.tourguide.gps.controller.dto.VisitedLocationWithUserNameDto;
+import com.tourguide.gps.domain.VisitedLocationWithUserName;
 import com.tourguide.gps.proxies.RewardProxy;
 import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.GpsService;
-import com.tourguide.gps.service.TrackService;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
+/**
+ * Controller
+ * @author David
+ *
+ */
 @RestController
 public class LocationController {
 
+	/**
+	 * @see GpsService
+	 */
 	@Autowired
 	private GpsService gpsService;
-	@Autowired
-	private TrackService trackService;
+	/** 
+	 * @see RewardProxy
+	 */ 
 	@Autowired
 	private RewardProxy rewardProxy;
+	/**
+	 * @see UserProxy
+	 */
 	@Autowired
 	private UserProxy userProxy;
 
+	/**
+	 * Endpoint getLocation
+	 * 
+	 * @param userName : The name of User
+	 * @return the location of user
+	 * 
+	 * @see com.tourguide.user.domain.User
+	 */
 	@RequestMapping("/getLocation")
 	public LocationDto getLocation(@RequestParam String userName) {
 		LocationDto locationDto;
@@ -46,11 +65,19 @@ public class LocationController {
 		return locationDto;
 	}
 
+	/**
+	 * Endpoint getNearbyAttractions
+	 * 
+	 * @param userName : The name of User
+	 * @return the 5 nearby attraction
+	 * 
+	 * @see com.tourguide.user.domain.User
+	 */
 	@RequestMapping("/getNearbyAttractions")
 	public List<NearbyAttractionsDto> getNearbyAttractions(@RequestParam String userName) {
 		List<NearbyAttractionsDto> nearbyAttractionsDtoList = new ArrayList<>();
 		UUID userId = userProxy.getUserId(userName);
-		VisitedLocation visitedLocation = trackService.trackUserLocation(userId, userName);
+		VisitedLocation visitedLocation = gpsService.getUserVisitedLocation(userName);
 		List<Attraction> attractionsList = gpsService.getUserNearByAttractions(visitedLocation);
 		for (Attraction attraction : attractionsList) {
 			Location userLocation = gpsService.getUserLocation(userName);
@@ -65,32 +92,48 @@ public class LocationController {
 		return nearbyAttractionsDtoList;
 	}
 
+	/**
+	 * Endpoint getAllCurrentLocations
+	 * 
+	 * @return Current locations of all users
+	 */
 	@RequestMapping("/getAllCurrentLocations")
-	public String getAllCurrentLocations() {
-		// TODO: Get a list of every user's most recent location as JSON
-		// - Note: does not use gpsUtil to query for their current location,
-		// but rather gathers the user's current location from their stored location
-		// history.
-		//
-		// Return object should be the just a JSON mapping of userId to Locations
-		// similar to:
-		// {
-		// "019b04a9-067a-4c76-8817-ee75088c3822":
-		// {"longitude":-48.188821,"latitude":74.84371}
-		// ...
-		// }
-
-		return JsonStream.serialize("");
+	public List<CurrentLocationDto> getAllCurrentLocations() {
+		List<CurrentLocationDto> allCurrentLocations = new ArrayList<CurrentLocationDto>();
+		userProxy.getUserIdAndUserNameAll().stream()
+		.forEach(userIdName-> allCurrentLocations.add(new CurrentLocationDto(userIdName.getUserId(),gpsService.getLastLocation(userIdName.getUserName()))));
+		System.out.println(allCurrentLocations.size());
+		return allCurrentLocations;
 	}
 
+	/**
+	 * Endpoint addVisitedLocation
+	 * 
+	 * @param userId : id of user
+	 * @param userName : name of user
+	 * @param latitude : latitde of location
+	 * @param longitude : longitude of location
+	 * @param timeVisited : time visietd location
+	 * 
+	 * @see com.tourguide.user.domain.User
+	 * @see Location
+	 * @see VisitedLocationWithUserName
+	 */
 	@RequestMapping("/addVisitedLocation")
-	public void addVisitedLocation(@RequestParam UUID uuid, @RequestParam String userName,
+	public void addVisitedLocation(@RequestParam UUID userId, @RequestParam String userName,
 			@RequestParam double latitude,
 			@RequestParam double longitude,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date timeVisited) {
-		gpsService.addVisitedLocation(uuid, userName, new Location(latitude, longitude), timeVisited);
+		gpsService.addVisitedLocation(userId, userName, new Location(latitude, longitude), timeVisited);
 	}
 
+	/**
+	 * Endpoint getVisitedLocations
+	 * 
+	 * @param userName
+	 * @return
+	 * @see VisitedLocationWithUserNameDto
+	 */
 	@RequestMapping("/getVisitedLocations")
 	public List<VisitedLocationWithUserNameDto> getVisitedLocations(@RequestParam String userName) {
 		List<VisitedLocationWithUserNameDto> visitedLocationDtoList = gpsService.getVisitedLocations(userName).stream()
@@ -99,6 +142,16 @@ public class LocationController {
 		return visitedLocationDtoList;
 	}
 
+	/**
+	 * Endpoint nearAttraction
+	 * 
+	 * @param location1Latitude : the latitude of location 1
+	 * @param location1Longitude : the longitude of location 1
+	 * @param location2Latitude : the latitude of location 2
+	 * @param location2Longitude : the longitude of location 2
+	 * @param nearMaxDistance : maximum distance between location 1 and 2
+	 * @return true if distance < nearMaxDistance else false
+	 */
 	@RequestMapping("/nearAttraction")
 	public boolean nearAttraction(@RequestParam double location1Latitude, @RequestParam double location1Longitude,
 			@RequestParam double location2Latitude, @RequestParam double location2Longitude,
@@ -109,11 +162,24 @@ public class LocationController {
 				nearMaxDistance);
 	}
 
+	/**
+	 * Endpoint getAttractions
+	 * @return all attractions
+	 */
 	@RequestMapping("/getAttractions")
 	public List<AttractionDto> getAttractions() {
 		return gpsService.getAttractions().stream()
 				.map(attraction -> AttractionDto.convertToDto(attraction))
 				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Endpoint delete all VisitedLocationWithUserName
+	 * @see VisitedLocationWithUserName
+	 */
+	@RequestMapping("/deleteAll")
+	public void deleteAll() {
+		gpsService.deleteAll();
 	}
 
 }

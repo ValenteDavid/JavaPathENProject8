@@ -26,8 +26,8 @@ public class Module {
 		@Override
 		public List<Provider> getPrice(String apiKey, UUID attractionId, int adults, int children, int nightsStay,
 				int rewardsPoints) {
-			List<Provider> providers = new ArrayList();
-			HashSet providersUsed = new HashSet();
+			List<Provider> providers = new ArrayList<>();
+			HashSet<String> providersUsed = new HashSet<>();
 
 			try {
 				TimeUnit.MILLISECONDS.sleep((long) ThreadLocalRandom.current().nextInt(1, 50));

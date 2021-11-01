@@ -2,14 +2,12 @@ package com.tourguide.gps.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +18,7 @@ import com.tourguide.gps.helper.InternalTestHelper;
 import com.tourguide.gps.proxies.RewardProxy;
 import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.GpsService;
-import com.tourguide.gps.service.TrackService;
 
-import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
@@ -32,11 +28,6 @@ public class GpsServiceIntegTest {
 	
 	@Autowired
 	private GpsService gpsService;
-	@Autowired
-	private TrackService trackService;
-	
-	@Autowired
-	private GpsUtil gpsUtil;
 	
 	@MockBean
 	private UserProxy userProxy;
@@ -49,10 +40,18 @@ public class GpsServiceIntegTest {
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 		InternalTestHelper.setInternalUserNumber(0);
 		
-		doNothing().when(rewardProxy).calculateRewards(userId, userName);
-		VisitedLocation visitedLocation = trackService.trackUserLocation(userId,userName);
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.YEAR, 5);
+		Date date = c.getTime();
 		
+		gpsService.addVisitedLocation(userId, userName, null, date);
+		VisitedLocation visitedLocation = gpsService.getLastVisitedLocation(userName);
+		
+		System.out.println(date);
+		System.out.println(visitedLocation);
 		assertTrue(visitedLocation.userId.equals(userId));
+		assertTrue(visitedLocation.timeVisited.equals(date));
 	}
 	
 	@Test

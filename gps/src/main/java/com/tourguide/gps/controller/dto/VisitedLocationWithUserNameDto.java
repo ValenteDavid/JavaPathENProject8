@@ -1,7 +1,6 @@
 package com.tourguide.gps.controller.dto;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import gpsUtil.location.VisitedLocation;

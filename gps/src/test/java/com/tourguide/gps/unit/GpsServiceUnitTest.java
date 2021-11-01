@@ -1,9 +1,7 @@
 package com.tourguide.gps.unit;
 
-import static org.hamcrest.Matchers.emptyArray;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,21 +59,6 @@ public class GpsServiceUnitTest {
 		when(visitedLocationDao.findByUserName(userName)).thenReturn(listVisitedLocations);
 		when(visitedLocationDao.findByUserNameOrderByTimeVisitedDesc(userName)).thenReturn(new VisitedLocation(userId, new Location(0, 0), new Date()));
 		
-		VisitedLocation visitedLocation = gpsService.getUserVisitedLocation(userName);
-		
-		assertTrue(visitedLocation.userId.equals(userId));
-	}
-	
-	@Test
-	public void getUserVistedLocation_EmptyVisitedLocation() {
-		String userName = "internalUser25";
-		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
-		InternalTestHelper.setInternalUserNumber(0);
-		
-		List<VisitedLocationWithUserName> listVisitedLocations = new ArrayList<>();
-		when(visitedLocationDao.findByUserName(userName)).thenReturn(listVisitedLocations);
-		when(userProxy.getUserId(userName)).thenReturn(userId);
-		when(trackService.trackUserLocation(userId, userName)).thenReturn(new VisitedLocation(userId, new Location(0, 0), new Date()));
 		VisitedLocation visitedLocation = gpsService.getUserVisitedLocation(userName);
 		
 		assertTrue(visitedLocation.userId.equals(userId));

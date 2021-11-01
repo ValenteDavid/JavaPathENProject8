@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.tourguide.user.controller.dto.UserIdName;
 import com.tourguide.user.domain.User;
 
 @Repository
@@ -40,4 +41,10 @@ public class UserDaoImpl implements UserDao {
 		return users;
 	}
 
+	@Override
+	public List<UserIdName> getUserIdentification() {
+		List<UserIdName> returnList = new ArrayList<UserIdName>();
+		getAll().stream().forEach(user -> returnList.add(new UserIdName(user.getUserId(), user.getUserName())));
+		return returnList;
+	}
 }

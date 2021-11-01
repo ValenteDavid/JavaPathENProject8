@@ -34,7 +34,7 @@ public class RewardsServiceIntegTest {
 	public void addUserRewards() {
 		userName = "internalUser25";
 		userId = UUID.nameUUIDFromBytes(userName.getBytes());
-		rewardsService.addUserRewards(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(), 5));
+		rewardsService.addUserRewards(new UserReward(userId, userName, UUID.randomUUID(), UUID.randomUUID(),"attractionName", 5));
 	}
 
 	@Test

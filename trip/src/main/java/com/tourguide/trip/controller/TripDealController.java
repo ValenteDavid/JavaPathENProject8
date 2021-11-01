@@ -11,13 +11,26 @@ import com.jsoniter.output.JsonStream;
 import com.tourguide.trip.service.TripDealService;
 
 import tripPricer.Provider;
-
+/**
+ * Trip deal controller
+ * @author David
+ *
+ */
 @Controller
 public class TripDealController {
 
+	/**
+	 * @see TripDealService
+	 */
 	@Autowired
 	private TripDealService tripDealService;
 	
+	/**
+	 * Endpoint /getTripDeals
+	 * @param userName : user name
+	 * @return provider list
+	 * @see com.tourguide.user.domain.User
+	 */
 	 @RequestMapping("/getTripDeals")
 	    public String getTripDeals(@RequestParam String userName) {
 	    	List<Provider> providers = tripDealService.getTripDeals(userName);

@@ -17,6 +17,16 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 	private List<VisitedLocationWithUserName> visitedLocationsWithUserNameList = new ArrayList<VisitedLocationWithUserName>();
 
 	@Override
+	public void setVisitedLocationsWithUserNameList(List<VisitedLocationWithUserName> visitedLocationsWithUserNameList) {
+		this.visitedLocationsWithUserNameList = visitedLocationsWithUserNameList;
+	}
+
+	@Override
+	public List<VisitedLocationWithUserName> getVisitedLocationsWithUserNameList() {
+		return visitedLocationsWithUserNameList;
+	}
+
+	@Override
 	public List<VisitedLocationWithUserName> findByUUID(UUID userId) {
 		return visitedLocationsWithUserNameList.stream()
 				.filter(visitedLocations -> visitedLocations.userId.equals(userId))
@@ -24,14 +34,14 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 	}
 	
 	@Override
-	public List<VisitedLocationWithUserName> findByUserName(String userName) {
+	public synchronized List<VisitedLocationWithUserName> findByUserName(String userName) {
 		return visitedLocationsWithUserNameList.stream()
 				.filter(visitedLocations -> visitedLocations.getUserName().equals(userName))
 				.collect(Collectors.toList());
 	}
-
+	
 	@Override
-	public VisitedLocationWithUserName save(VisitedLocationWithUserName visitedLocationWithUserName) {
+	public synchronized VisitedLocationWithUserName save(VisitedLocationWithUserName visitedLocationWithUserName) {
 		visitedLocationsWithUserNameList.add(visitedLocationWithUserName);
 		return visitedLocationWithUserName;
 	}
@@ -39,26 +49,40 @@ public class VisitedLocationDaoImpl implements VisitedLocationDao {
 	@Override
 	public VisitedLocationWithUserName findByUUIDOrderByTimeVisitedDesc(UUID userId) {
 		List<VisitedLocationWithUserName> visitedLocationByUUID = findByUUID(userId);
-		VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
 		
-		for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
-			if (visitedLocationWithUserName.getTimeVisited().before(visitedLocationLast.getTimeVisited())) {
-				visitedLocationLast=visitedLocationWithUserName;
+		if (!visitedLocationByUUID.isEmpty()) {
+			VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
+			for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
+				if (visitedLocationLast.getTimeVisited().before(visitedLocationWithUserName.getTimeVisited())) {
+					visitedLocationLast=visitedLocationWithUserName;
+				}
 			}
+			return visitedLocationLast;
 		}
-		return visitedLocationLast;
+		else {
+			return null;
+		}
 	}
 
 	@Override
 	public VisitedLocation findByUserNameOrderByTimeVisitedDesc(String userName) {
 		List<VisitedLocationWithUserName> visitedLocationByUUID = findByUserName(userName);
-		VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
-		
-		for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
-			if (visitedLocationWithUserName.getTimeVisited().before(visitedLocationLast.getTimeVisited())) {
-				visitedLocationLast=visitedLocationWithUserName;
+		if (!visitedLocationByUUID.isEmpty()) {
+			VisitedLocationWithUserName visitedLocationLast = visitedLocationByUUID.get(0);
+			for (VisitedLocationWithUserName visitedLocationWithUserName : visitedLocationByUUID) {
+				if (visitedLocationLast.getTimeVisited().before(visitedLocationWithUserName.getTimeVisited())) {
+					visitedLocationLast=visitedLocationWithUserName;
+				}
 			}
+			return visitedLocationLast;
 		}
-		return visitedLocationLast;
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public void deleteAll() {
+		visitedLocationsWithUserNameList = new ArrayList<VisitedLocationWithUserName>();
 	}
 }
