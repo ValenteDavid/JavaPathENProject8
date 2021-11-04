@@ -36,7 +36,6 @@ public class RewardServicePerfTest {
 	@Autowired
 	private RewardsService rewardsService;
 	
-
 	@Test
 	public void highVolumeGetRewards() {
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes

@@ -32,14 +32,14 @@ public class TripDealServiceImpl implements TripDealService {
 	private TripPricer tripPricer;
 
 	@Override
-	public List<Provider> getTripDeals(String userName) {
-		int cumulatativeRewardPoints = rewardProxy.getRewardsPoints(userName);
+	public List<Provider> getTripDeals(String userName,UUID attractionId) {
 		UserPreferenceDto userPreference = userProxy.getUserPreference(userName);
 		UUID userId = userProxy.getUserId(userName);
+		int cumulatativeRewardPoints = rewardProxy.getRewardsPoints(attractionId,userId);
 		//TODO tripPricer.getPrice(...) need attractionId not userId
 		List<Provider> providers = tripPricer.getPrice(
 				tripPricerApiKey, 
-				userId,
+				attractionId,
 				userPreference.getNumberOfAdults(),
 				userPreference.getNumberOfChildren(),
 				userPreference.getTripDuration(),

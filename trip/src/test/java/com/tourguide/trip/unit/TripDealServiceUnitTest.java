@@ -43,17 +43,20 @@ public class TripDealServiceUnitTest {
 	public void getTripDeals() {
 		String userName = "internalUser25";
 		InternalTestHelper.setInternalUserNumber(0);
+		UUID attractionId = UUID.randomUUID();
+		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 		
-		when(rewardProxy.getRewardsPoints(userName)).thenReturn(10);
+		when(userProxy.getUserId(userName)).thenReturn(userId);
+		when(rewardProxy.getRewardsPoints(attractionId,userId)).thenReturn(10);
 		when(userProxy.getUserPreference(userName)).thenReturn(new UserPreferenceDto(5, 3, 2));
-		when(userProxy.getUserId(userName)).thenReturn(UUID.nameUUIDFromBytes(userName.getBytes()));
+		
 		
 		List<Provider> providersReturn  = new ArrayList<Provider>();
 		for (int i = 1; i <= 10; i++) {
 			providersReturn.add(new Provider(UUID.randomUUID(), "name", 10));
 		}
 		when(tripPricer.getPrice(anyString(),any(),anyInt(),anyInt(),anyInt(),anyInt())).thenReturn(providersReturn);
-		List<Provider> providers = tripDealService.getTripDeals(userName);
+		List<Provider> providers = tripDealService.getTripDeals(userName,attractionId);
 		
 		assertEquals(10, providers.size());
 	}

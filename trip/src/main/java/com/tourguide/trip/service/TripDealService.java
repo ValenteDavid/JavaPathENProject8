@@ -1,6 +1,7 @@
 package com.tourguide.trip.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import tripPricer.Provider;
 
@@ -17,6 +18,6 @@ public interface TripDealService {
 	 * @return 
 	 * @See Provider
 	 */
-	List<Provider> getTripDeals(String userName);
+	List<Provider> getTripDeals(String userName,UUID attractionId);
 
 }

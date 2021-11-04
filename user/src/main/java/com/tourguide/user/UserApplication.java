@@ -16,7 +16,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 
 import com.tourguide.user.dao.UserDao;
+import com.tourguide.user.dao.UserPreferenceDao;
 import com.tourguide.user.domain.User;
+import com.tourguide.user.domain.UserPreferences;
 import com.tourguide.user.helper.InternalTestHelper;
 
 /**
@@ -37,6 +39,9 @@ public class UserApplication {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private UserPreferenceDao userPreferenceDao;
 
 	@Profile("dev")
 	@Bean
@@ -49,9 +54,12 @@ public class UserApplication {
 				String userName = "internalUser" + i;
 				String phone = "000";
 				String email = userName + "@tourGuide.com";
-				User user = new User(UUID.nameUUIDFromBytes(userName.getBytes()), userName, phone, email);
+				UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
+				User user = new User(userId, userName, phone, email);
 				logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
 				userDao.save(user);
+				
+				userPreferenceDao.save(new UserPreferences(userId, userName,1, 1, 5, 5));
 
 			});
 		};

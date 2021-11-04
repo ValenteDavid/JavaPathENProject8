@@ -1,5 +1,7 @@
 package com.tourguide.trip.proxies;
 
+import java.util.UUID;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,6 @@ public interface RewardProxy {
 	 * @see com.tourguide.reward.controller
 	 */
 	@RequestMapping("/getRewardsPoints")
-	int getRewardsPoints(@RequestParam String userName);
+	int getRewardsPoints(@RequestParam UUID attractionId, @RequestParam UUID userId);
 
 }

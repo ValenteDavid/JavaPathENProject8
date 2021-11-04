@@ -1,13 +1,13 @@
 package com.tourguide.trip.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.jsoniter.output.JsonStream;
 import com.tourguide.trip.service.TripDealService;
 
 import tripPricer.Provider;
@@ -16,7 +16,7 @@ import tripPricer.Provider;
  * @author David
  *
  */
-@Controller
+@RestController
 public class TripDealController {
 
 	/**
@@ -32,9 +32,9 @@ public class TripDealController {
 	 * @see com.tourguide.user.domain.User
 	 */
 	 @RequestMapping("/getTripDeals")
-	    public String getTripDeals(@RequestParam String userName) {
-	    	List<Provider> providers = tripDealService.getTripDeals(userName);
-	    	return JsonStream.serialize(providers);
+	    public List<Provider> getTripDeals(@RequestParam String userName,@RequestParam UUID attractionId) {
+	    	List<Provider> providers = tripDealService.getTripDeals(userName,attractionId);
+	    	return providers;
 	    }
 	
 }
