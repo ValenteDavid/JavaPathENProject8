@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.tourguide.user.controller.dto.UserIdName;
 import com.tourguide.user.dao.UserDao;
-import com.tourguide.user.dao.UserPreferenceDao;
 import com.tourguide.user.domain.User;
-import com.tourguide.user.domain.UserPreferences;
 
 @Service
 public class UserServiceImpl implements UserService {

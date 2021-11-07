@@ -3,19 +3,19 @@ package com.tourguide.reward.performance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tourguide.reward.RewardApplication;
 import com.tourguide.reward.controller.dto.AttractionDto;
 import com.tourguide.reward.controller.dto.UserIdName;
+import com.tourguide.reward.controller.dto.VisitedLocationWithUserNameDto;
 import com.tourguide.reward.dao.RewardDao;
 import com.tourguide.reward.helper.InternalTestHelper;
 import com.tourguide.reward.proxies.GpsProxy;
@@ -39,7 +39,7 @@ public class RewardServicePerfTest {
 	@Test
 	public void highVolumeGetRewards() {
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
-		InternalTestHelper.setInternalUserNumber(100000);
+		InternalTestHelper.setInternalUserNumber(10000);
 		System.out.println(InternalTestHelper.getInternalUserNumber());
 		AttractionDto attraction =  gpsProxy.getAttractions().get(0);
 		
@@ -49,23 +49,28 @@ public class RewardServicePerfTest {
 		gpsProxy.deleteAll();
 		allUsers.forEach(u -> gpsProxy.addVisitedLocation(u.getUserId(),u.getUserName(), attraction.getLatitude(), attraction.getLongitude(),  new Date()));
 		
+		HashMap<String, List<VisitedLocationWithUserNameDto>> hashMap = new HashMap<String, List<VisitedLocationWithUserNameDto>>();
+		for (UserIdName userIdName : allUsers) {
+			String userName = userIdName.getUserName();
+			hashMap.put(userName, gpsProxy.getVisitedLocations(userName));
+		}
+		
+		List<AttractionDto> attractions = gpsProxy.getAttractions();
 		rewardsService.deleteAll();
 		System.out.println("---------START---------");
+		System.out.println(new Date());
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		for(UserIdName userIdName : allUsers) {
-			rewardsService.calculateRewards(userIdName.getUserId(),userIdName.getUserName());
+		for (UserIdName userIdName : allUsers) {
+			rewardsService.calculateRewards(
+					userIdName.getUserId(),
+					userIdName.getUserName(),
+					hashMap.get(userIdName.getUserName()),
+				 	attractions);
 		}
 		
-		boolean flag = true;
-		while (flag) {
-			flag = false;
-			for(UserIdName userIdName : allUsers) {
-				if (rewardsService.getUserRewards(userIdName.getUserName()).size()<0) {
-					flag = true;
-				};
-			}
+		while (rewardDao.getUserRewards().size()<(InternalTestHelper.getInternalUserNumber()*4)) {
 			System.out.println(rewardDao.getUserRewards().size());
 			try {
 				Thread.sleep(100);
@@ -73,6 +78,7 @@ public class RewardServicePerfTest {
 				e.printStackTrace();
 			}
 		}
+
 		System.out.println("FIN");
 		System.out.println(rewardDao.getUserRewards().size());
 		stopWatch.stop();

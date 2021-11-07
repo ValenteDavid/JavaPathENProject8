@@ -2,7 +2,6 @@ package com.tourguide.user.controller.dto;
 
 import java.util.UUID;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 

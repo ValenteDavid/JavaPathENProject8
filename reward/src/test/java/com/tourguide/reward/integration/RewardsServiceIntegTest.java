@@ -11,11 +11,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import com.tourguide.reward.RewardApplication;
-import com.tourguide.reward.dao.RewardDao;
 import com.tourguide.reward.domain.UserReward;
 import com.tourguide.reward.helper.InternalTestHelper;
 import com.tourguide.reward.service.RewardsService;

@@ -1,10 +1,7 @@
 package com.tourguide.gps.unit;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.tourguide.gps.GpsApplication;
-import com.tourguide.gps.controller.LocationController;
 import com.tourguide.gps.controller.dto.UserIdName;
 import com.tourguide.gps.proxies.UserProxy;
 import com.tourguide.gps.service.GpsService;

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,11 +65,9 @@ public class RewardsServiceImpl implements RewardsService {
 				for (AttractionDto attraction : attractionsList) {
 					if (gpsProxy.nearAttraction(visitedLocation.getLatitude(), visitedLocation.getLongitude(),
 							attraction.getLatitude(), attraction.getLongitude(), attractionProximityRange)) {
-						executor.execute(() -> {
 							addUserRewards(new UserReward(userId, userName, visitedLocation.getId(),
 									attraction.getAttractionId(), attraction.getAttractionName(),
 									getRewardPoints(attraction.getAttractionId(), userId)));
-						});
 
 					}
 				}

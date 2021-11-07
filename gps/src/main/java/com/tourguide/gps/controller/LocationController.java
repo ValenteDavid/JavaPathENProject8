@@ -102,7 +102,6 @@ public class LocationController {
 		List<CurrentLocationDto> allCurrentLocations = new ArrayList<CurrentLocationDto>();
 		userProxy.getUserIdAndUserNameAll().stream()
 		.forEach(userIdName-> allCurrentLocations.add(new CurrentLocationDto(userIdName.getUserId(),gpsService.getLastLocation(userIdName.getUserName()))));
-		System.out.println(allCurrentLocations.size());
 		return allCurrentLocations;
 	}
 
