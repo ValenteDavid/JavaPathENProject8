@@ -1,6 +1,8 @@
 package com.tourguide.gps.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 
 import java.util.UUID;
@@ -34,7 +36,7 @@ public class TrackServiceIntegTest {
 		String userName = "internalUser25";
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 		
-		doNothing().when(rewardProxy).calculateRewards(userId, userName);
+		doNothing().when(rewardProxy).calculateRewards(any(), any(),anyList(),anyList());
 		trackService.trackUserLocation(userId,userName);
 		try {
 			Thread.sleep(100);

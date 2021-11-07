@@ -1,5 +1,7 @@
 package com.tourguide.gps.unit;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,13 +43,13 @@ public class TrackServiceUnitTest {
 		UUID userId = UUID.nameUUIDFromBytes(userName.getBytes());
 		InternalTestHelper.setInternalUserNumber(0);
 		
-		doNothing().when(rewardProxy).calculateRewards(userId, userName);
+		doNothing().when(rewardProxy).calculateRewards(any(), any(),anyList(),anyList());
 		VisitedLocation visitedLocation =new VisitedLocation(userId, new Location(0, 0), new Date());
 		when(gpsUtil.getUserLocation(userId)).thenReturn(visitedLocation);
 		trackService.trackUserLocation(userId,userName);
 		
 		verify(gpsUtil,times(1)).getUserLocation(userId);
-		verify(rewardProxy,times(1)).calculateRewards(userId,userName);
+		verify(rewardProxy,times(1)).calculateRewards(any(),any(),anyList(),anyList());
 		
 	}
 
