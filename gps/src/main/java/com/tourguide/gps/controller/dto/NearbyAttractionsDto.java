@@ -2,17 +2,17 @@ package com.tourguide.gps.controller.dto;
 
 public class NearbyAttractionsDto {
 	
-	private String userName;
-	private double userLatitude;
-	private double userLongitude;
+	private String attractionName;
 	private double attractionLatitude;
 	private double attractionLongitude;
+	private double userLatitude;
+	private double userLongitude;
 	private double distanceUserAttraction;
 	private int rewardPoints;
 	
-	public NearbyAttractionsDto(String userName, double attractionLatitude, double attractionLongitude,
+	public NearbyAttractionsDto(String attractionName, double attractionLatitude, double attractionLongitude,
 			double userLatitude, double userLongitude, double distanceUserAttraction, int rewardPoints) {
-		this.userName = userName;
+		this.attractionName = attractionName;
 		this.attractionLatitude = attractionLatitude;
 		this.attractionLongitude = attractionLongitude;
 		this.userLatitude = userLatitude;
@@ -21,12 +21,12 @@ public class NearbyAttractionsDto {
 		this.rewardPoints = rewardPoints;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getAttractionName() {
+		return attractionName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAttractionName(String attractionName) {
+		this.attractionName = attractionName;
 	}
 
 	public double getAttractionLatitude() {
@@ -79,7 +79,7 @@ public class NearbyAttractionsDto {
 
 	@Override
 	public String toString() {
-		return "NearbyAttractionsdto [userName=" + userName + ", attractionLatitude=" + attractionLatitude
+		return "NearbyAttractionsdto [attractionName=" + attractionName + ", attractionLatitude=" + attractionLatitude
 				+ ", attractionLongitude=" + attractionLongitude + ", userLatitude=" + userLatitude + ", userLongitude="
 				+ userLongitude + ", distanceUserAttraction=" + distanceUserAttraction + ", rewardPoints="
 				+ rewardPoints + "]";

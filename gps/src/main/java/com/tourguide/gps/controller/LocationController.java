@@ -83,7 +83,7 @@ public class LocationController {
 			Location userLocation = gpsService.getUserLocation(userName);
 			int rewardPoint = rewardProxy.getRewardsPoints(attraction.attractionId, userId);
 			nearbyAttractionsDtoList.add(new NearbyAttractionsDto(
-					userName,
+					attraction.attractionName,
 					attraction.latitude, attraction.longitude,
 					userLocation.latitude, userLocation.longitude,
 					gpsService.getDistance(userLocation, attraction),

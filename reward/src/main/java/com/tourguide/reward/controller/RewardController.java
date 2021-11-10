@@ -32,19 +32,6 @@ public class RewardController {
 
 	private ExecutorService executor = Executors.newFixedThreadPool(100);
 
-//	/**
-//	 * Endpoint /calculateRewards
-//	 * @param userId : user id
-//	 * @param userName : user name
-//	 * @see com.tourguide.user.domain.User
-//	 */
-//	@RequestMapping("/calculateRewards")
-//	public void calculateRewards(@RequestParam UUID userId,@RequestParam String userName) {
-//		executor.execute(() -> {
-//				rewardService.calculateRewards(userId,userName);
-//		});
-//	}
-
 	/**
 	 * Endpoint /calculateRewards
 	 * 
